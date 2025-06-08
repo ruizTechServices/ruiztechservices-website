@@ -24,6 +24,12 @@ export default function Home() {
         >
           Testing Grounds
         </Link>
+        <Link 
+          href="/" 
+          className="text-sm bg-secondary/20 hover:bg-secondary/30 text-secondary-foreground px-3 py-1 rounded-md transition-colors"
+        >
+          Home
+        </Link>
       </div>
       
       <div className="bg-card rounded-lg shadow-sm p-4 md:p-6">

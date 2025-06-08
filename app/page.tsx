@@ -6,8 +6,8 @@ export default function Home() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
       <div className="max-w-4xl w-full text-center">
-        <h1 className="text-4xl md:text-6xl font-bold tracking-tighter mb-4">
-          ruizTech<span className="text-blue-600">Services</span>|
+        <h1 className="text-4xl md:text-6xl font-semibold tracking-tighter mb-4 mx-2">
+          ruizTech<span className=" animate-gradient">Services</span><span className="animate-blink">|</span>
         </h1>
         
         <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto">

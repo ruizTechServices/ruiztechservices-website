@@ -119,4 +119,31 @@
   body {
     @apply bg-background text-foreground;
   }
+  @keyframes animate-gradient {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+  .animate-gradient {
+    background: linear-gradient(270deg, #00b4d8, #48cae4, #90e0ef, #00b4d8);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    @apply animate-[animate-gradient_2s_linear_infinite];
+  }
+  @keyframes cursor-blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+  .animate-blink {
+    @apply animate-[cursor-blink_1s_steps(1)_infinite];
+  }
 }
