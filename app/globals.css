@@ -131,13 +131,13 @@
     }
   }
   .animate-gradient {
-    background: linear-gradient(270deg, #00b4d8, #48cae4, #90e0ef, #00b4d8);
+    background: linear-gradient(270deg, #1900ff, #ffffff, #0011ff, #68e0f8);
     background-size: 200% 200%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     color: transparent;
-    @apply animate-[animate-gradient_2s_linear_infinite];
+    @apply animate-[animate-gradient_15s_linear_infinite];
   }
   @keyframes cursor-blink {
     0%, 100% { opacity: 1; }

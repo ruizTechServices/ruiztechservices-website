@@ -35,7 +35,7 @@ interface InputMainProps extends React.ComponentProps<"input"> {
     }, [embedding, error]);
 
     return (
-        <div className="flex gap-2 w-1/2 border-2 border-green-300 rounded-md">
+        <div className="flex gap-2 w-full md:w-1/2 md:mx-auto md:my-2">
             <input
                 className={cn(
                     "w-full rounded-md border bg-transparent px-3 py-2 text-sm",

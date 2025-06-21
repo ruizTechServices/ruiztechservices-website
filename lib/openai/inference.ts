@@ -1,8 +1,6 @@
-import OpenAI from 'openai';
+import openai from './client';
+import { DEFAULT_MODEL, DEFAULT_STORE_LOGS } from '../constants';
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
 
 /**
  * Call the new /v1/responses endpoint
@@ -19,9 +17,9 @@ export interface OpenAIResponseOptions {
 
 export async function getOpenAIResponse(input: any, options: OpenAIResponseOptions = {}) {
   const {
-    model = 'gpt-4.1',
+    model = DEFAULT_MODEL,
     tools = [],
-    store = true,  // Whether OpenAI should retain logs (set false if privacy)
+    store = DEFAULT_STORE_LOGS,
     stream = false,
   } = options;
 
