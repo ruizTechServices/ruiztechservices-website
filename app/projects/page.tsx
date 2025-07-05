@@ -7,7 +7,7 @@ import Link from "next/link";
 //THis is the projects page server component
 export default function ProjectsPage() {
     return (
-        <main>
+        <main className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-400">
             <h1>Projects</h1>
             <p>Here are some of the projects I have worked on:</p>
 

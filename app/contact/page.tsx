@@ -1,38 +1,38 @@
 // app/contact/page.tsx
-//THis is the contact page server component
-'use client';
+// This is the contact page server component
+import { ContactForm } from '@/components/forms/ContactForm';
+import { ContactInfo } from '@/components/sections/ContactInfo';
+
+export const metadata = {
+  title: 'Contact RuizTechServices|',
+  description:
+    'Get in touch with RuizTechServices| for web development, AI integrations, and tech support in NYC.',
+};
+
 export default function ContactPage() {
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        const formData = new FormData(event.currentTarget);
-        const name = formData.get("name") as string;
-        const email = formData.get("email") as string;
-        const message = formData.get("message") as string;
-        console.log({ name, email, message });
-    };
-    return (
-        <main className="max-w-2xl mx-auto p-6 space-y-10 md:p-10 lg:p-16">
-            <h1 className="text-3xl font-bold">Contact Us</h1>
-            <p className="text-lg">
-                Thank you for your interest in RuizTechServices|. Please fill out the form below to get in touch:
-            </p>
-            <form onSubmit={handleSubmit} className="space-y-6">
-                <label htmlFor="name" className="block">
-                    <span className="text-lg">Name:</span>
-                    <input type="text" id="name" name="name" required className="block w-full px-4 py-2 mt-2 text-lg border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600" />
-                </label>
-                <label htmlFor="email" className="block">
-                    <span className="text-lg">Email:</span>
-                    <input type="email" id="email" name="email" required className="block w-full px-4 py-2 mt-2 text-lg border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600" />
-                </label>
-                <label htmlFor="message" className="block">
-                    <span className="text-lg">Message:</span>
-                    <textarea id="message" name="message" required className="block w-full px-4 py-2 mt-2 text-lg border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600" />
-                </label>
-                <button type="submit" className="px-6 py-2 text-lg font-semibold text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600">
-                    Send
-                </button>
-            </form>
-        </main>
-    );
+  return (
+    <main className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
+      <div className="container mx-auto px-4 py-12 md:py-16">
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+            Contact Us
+          </h1>
+          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+            Ready to bring your ideas to life? Let's discuss your project and how 
+            RuizTechServices| can help you achieve your goals.
+          </p>
+        </div>
+        
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
+          <div className="order-2 lg:order-1">
+            <ContactInfo />
+          </div>
+          
+          <div className="order-1 lg:order-2">
+            <ContactForm />
+          </div>
+        </div>
+      </div>
+    </main>
+  );
 }
