@@ -33,7 +33,7 @@ export function ContactForm() {
       <CardHeader>
         <CardTitle>Get In Touch</CardTitle>
         <CardDescription>
-          Send us a message and we'll get back to you as soon as possible.
+          Send us a message and we&apos;ll get back to you as soon as possible.
         </CardDescription>
       </CardHeader>
       <CardContent>

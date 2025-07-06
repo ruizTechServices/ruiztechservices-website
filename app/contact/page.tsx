@@ -18,7 +18,7 @@ export default function ContactPage() {
             Contact Us
           </h1>
           <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-            Ready to bring your ideas to life? Let's discuss your project and how 
+            Ready to bring your ideas to life? Let&apos;s discuss your project and how 
             RuizTechServices| can help you achieve your goals.
           </p>
         </div>

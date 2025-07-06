@@ -9,7 +9,7 @@ export function Hero() {
       </h1>
       
       <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8 max-w-2xl mx-auto">
-        🏙️ New York City's Best Tech Servicer
+        🏙️ New York City&apos;s Best Tech Servicer
       </p>
       
       <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">

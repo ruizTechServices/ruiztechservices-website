@@ -10,11 +10,13 @@ import { DEFAULT_MODEL, DEFAULT_STORE_LOGS } from '../constants';
  */
 export interface OpenAIResponseOptions {
   model?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   tools?: any[];
   store?: boolean;
   stream?: boolean;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function getOpenAIResponse(input: any, options: OpenAIResponseOptions = {}) {
   const {
     model = DEFAULT_MODEL,
@@ -38,6 +40,7 @@ export async function getOpenAIResponse(input: any, options: OpenAIResponseOptio
       // Streaming response: aggregate output_text from chunks
       let result = '';
       // TypeScript may not know res is async iterable, so we assert
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       for await (const chunk of res as any) {
         // Adjust property name as per SDK docs; fallback to chunk.choices?.[0]?.text if needed
         if (chunk?.output_text) {

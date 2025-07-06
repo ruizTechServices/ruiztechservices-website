@@ -18,7 +18,7 @@ export async function mistralEmbeddings({
 }: {
   inputs: string[];
   model?: string;
-}): Promise<any> {
+}) {
   try {
     const embeddingsResponse = await client.embeddings.create({ model, inputs });
     return embeddingsResponse;

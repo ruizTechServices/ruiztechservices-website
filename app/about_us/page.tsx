@@ -1,8 +1,6 @@
 // app/about_us/page.tsx
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import Link from 'next/link';
-import { Navbar } from '@/components/main/navbar';
 
 export const metadata = {
   title: 'About RuizTechServices|',
