@@ -5,7 +5,7 @@ export const privacyPolicy = {
   title: "Privacy Policy",
   description: "How ruizTechServices handles your data.",
   lastUpdated: "December 2024",
-  contactEmail: "contact@ruiztechservices.com",
+  contactEmail: "service_team@ruiztechservices.com",
   sections: [
     {
       heading: "What We Collect",
@@ -57,7 +57,7 @@ export const termsOfService = {
   title: "Terms of Service",
   description: "Terms and conditions for working with ruizTechServices.",
   lastUpdated: "December 2024",
-  contactEmail: "contact@ruiztechservices.com",
+  contactEmail: "service_team@ruiztechservices.com",
   sections: [
     {
       heading: "Scope & Quotes",
