@@ -1,12 +1,42 @@
-# RuizTechServices
+# ruizTechServices
 
-## Vision: Agents Empowering Everyday Work
-RuizTechServices exists to **put small-scale automation and AI agents in the hands of local businesses and do-it-yourselfers**.  By blending full-stack web craftsmanship with hard-earned repair-shop experience, founder **Luis Ruiz** ships pragmatic tools that remove busy-work and surface real-time insights—without the enterprise-grade price tag.
+**Tech Advisory + On-Site NYC Support for Small Businesses**
+
+I diagnose, fix, and build. Month-to-month. No fluff.
 
 ---
 
+## What We Do
 
-## About Luis Giovanni Ruiz
-Luis Giovanni Ruiz is a computer-science specialist and sole proprietor of **ruizTechServices**, where he architects and delivers end-to-end solutions in web development, artificial intelligence, database design, and DevOps automation. Leveraging deep technical expertise across the full software stack and modern cloud infrastructures, he provides high-performance, scalable systems and data-driven products for a diverse client base.
+- **Tech Advisory (Fractional CTO)** – Strategic guidance, architecture decisions, vendor selection, team scaling
+- **On-Site NYC Support** – Hands-on technical support at your location (Manhattan, Brooklyn, Queens, Bronx)
+- **Build & Deploy** – Web applications, AI workflows, automations. I build it, you own it.
 
-> *“Ship fast, stay authentic, automate the boring stuff.”* – Luis G. Ruiz
+---
+
+## Tech Stack
+
+- **Framework**: Next.js 15 (App Router)
+- **UI**: React 19, Tailwind CSS, shadcn/ui
+- **Database**: Supabase
+- **AI**: OpenAI, Mistral integrations
+- **Deployment**: Vercel-ready
+
+---
+
+## Local Development
+
+```bash
+npm install
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000).
+
+---
+
+## About
+
+Founded September 2024 in NYC by **Luis Giovanni Ruiz**. Solo-run, direct access, no middleman.
+
+> *"Ship fast, stay authentic, automate the boring stuff."* – Luis G. Ruiz

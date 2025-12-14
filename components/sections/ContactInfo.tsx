@@ -52,11 +52,11 @@ export function ContactInfo() {
         </CardHeader>
         <CardContent>
           <ul className="space-y-2 text-sm">
-            <li>• Custom Next.js & React applications</li>
-            <li>• AI & chatbot integrations (OpenAI, Pinecone, Supabase)</li>
-            <li>• On-site tech support & IoT setups</li>
-            <li>• Web development consulting</li>
-            <li>• Performance optimization</li>
+            <li>• Tech Advisory (Fractional CTO)</li>
+            <li>• On-Site NYC Support</li>
+            <li>• Web Application Builds</li>
+            <li>• AI & Automation Workflows</li>
+            <li>• System Migrations & Setup</li>
           </ul>
         </CardContent>
       </Card>

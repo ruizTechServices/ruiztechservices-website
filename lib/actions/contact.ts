@@ -19,7 +19,23 @@ export async function submitContactForm(
     // Extract form data
     const name = formData.get('name') as string;
     const email = formData.get('email') as string;
-    const message = formData.get('message') as string;
+    const rawMessage = formData.get('message') as string;
+    
+    // Extract pre-qualification fields
+    const helpType = formData.get('helpType') as string || 'not specified';
+    const supportType = formData.get('supportType') as string || 'not specified';
+    const urgency = formData.get('urgency') as string || 'normal';
+    const budget = formData.get('budget') as string || 'not specified';
+    
+    // Build structured message with pre-qualification data
+    const message = `--- PRE-QUALIFICATION ---
+Help Type: ${helpType}
+Support Type: ${supportType}
+Urgency: ${urgency}
+Budget: ${budget}
+
+--- MESSAGE ---
+${rawMessage}`;
 
     // Basic validation
     if (!name || !email || !message) {
