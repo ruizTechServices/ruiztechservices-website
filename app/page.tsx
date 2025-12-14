@@ -1,13 +1,17 @@
-import { Hero } from "@/components/main/hero";
-import { Services } from "@/components/main/services";
+import { HeroSection } from "@/components/sections/HeroSection";
+import { ServiceBuckets } from "@/components/sections/ServiceBuckets";
+import { HowItWorks } from "@/components/sections/HowItWorks";
+import { TrustSignals } from "@/components/sections/TrustSignals";
 
 export default function Home() {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-6 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-400">
-      <div className="max-w-4xl w-full text-center">
-        <Hero />
-        <Services />
+    <main className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
+      <div className="container mx-auto px-4 max-w-6xl">
+        <HeroSection />
+        <ServiceBuckets />
+        <HowItWorks />
+        <TrustSignals />
       </div>
-    </div>
+    </main>
   );
 }
