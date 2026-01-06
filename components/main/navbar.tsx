@@ -9,13 +9,24 @@ import {
   NavigationMenuItem,
   NavigationMenuLink,
 } from "@/components/ui/navigation-menu";
+import { Button } from "@/components/ui/button";
 import { LoginButton } from "@/components/main/LoginButton";
 import { LoginModal } from "@/components/main/LoginModal";
 import { handleLoginClick } from "@/lib/auth/handlers";
-import { signInWithGoogleOAuth } from "@/lib/auth/oauth";
+import { signInWithGoogleOAuth, signOut } from "@/lib/auth/oauth";
+import { useAuth } from "@/hooks/use-auth";
 
 export function Navbar() {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const { user, loading } = useAuth();
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+    } catch (error) {
+      console.error("[Auth] Sign out error:", error);
+    }
+  };
 
   return (
     <NavigationMenu className="w-full bg-white border-b">
@@ -51,15 +62,30 @@ export function Navbar() {
         </NavigationMenuItem>
 
         <NavigationMenuItem>
-          <LoginButton onClick={() => handleLoginClick(() => setIsLoginModalOpen(true))} />
+          {loading ? (
+            <Button variant="outline" disabled>
+              Loading...
+            </Button>
+          ) : user ? (
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-gray-600">{user.email}</span>
+              <Button variant="outline" onClick={handleSignOut}>
+                Logout
+              </Button>
+            </div>
+          ) : (
+            <LoginButton onClick={() => handleLoginClick(() => setIsLoginModalOpen(true))} />
+          )}
         </NavigationMenuItem>
       </NavigationMenuList>
 
-      <LoginModal
-        open={isLoginModalOpen}
-        onOpenChange={setIsLoginModalOpen}
-        onGoogleSignIn={signInWithGoogleOAuth}
-      />
+      {!user && (
+        <LoginModal
+          open={isLoginModalOpen}
+          onOpenChange={setIsLoginModalOpen}
+          onGoogleSignIn={signInWithGoogleOAuth}
+        />
+      )}
     </NavigationMenu>
   );
 }
