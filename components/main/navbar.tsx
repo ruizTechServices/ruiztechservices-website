@@ -1,6 +1,7 @@
 // components/navbar.tsx
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import {
   NavigationMenu,
@@ -8,8 +9,13 @@ import {
   NavigationMenuItem,
   NavigationMenuLink,
 } from "@/components/ui/navigation-menu";
+import { LoginButton } from "@/components/main/LoginButton";
+import { LoginModal } from "@/components/main/LoginModal";
+import { handleLoginClick } from "@/lib/auth/handlers";
 
 export function Navbar() {
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+
   return (
     <NavigationMenu className="w-full bg-white border-b">
       <NavigationMenuList className="flex justify-around p-4">
@@ -42,7 +48,13 @@ export function Navbar() {
             <Link href="/pricing">Pricing</Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
+
+        <NavigationMenuItem>
+          <LoginButton onClick={() => handleLoginClick(() => setIsLoginModalOpen(true))} />
+        </NavigationMenuItem>
       </NavigationMenuList>
+
+      <LoginModal open={isLoginModalOpen} onOpenChange={setIsLoginModalOpen} />
     </NavigationMenu>
   );
 }

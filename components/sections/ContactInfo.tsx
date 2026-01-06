@@ -16,7 +16,7 @@ export function ContactInfo() {
             <Mail className="h-5 w-5 text-primary" />
             <div>
               <p className="font-medium">Email</p>
-              <p className="text-sm text-muted-foreground">contact@ruiztechservices.com</p>
+              <p className="text-sm text-muted-foreground">service_team@ruiztechservices.com</p>
             </div>
           </div>
           
