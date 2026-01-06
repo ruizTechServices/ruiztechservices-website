@@ -12,6 +12,7 @@ import {
 import { LoginButton } from "@/components/main/LoginButton";
 import { LoginModal } from "@/components/main/LoginModal";
 import { handleLoginClick } from "@/lib/auth/handlers";
+import { signInWithGoogleOAuth } from "@/lib/auth/oauth";
 
 export function Navbar() {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
@@ -54,7 +55,11 @@ export function Navbar() {
         </NavigationMenuItem>
       </NavigationMenuList>
 
-      <LoginModal open={isLoginModalOpen} onOpenChange={setIsLoginModalOpen} />
+      <LoginModal
+        open={isLoginModalOpen}
+        onOpenChange={setIsLoginModalOpen}
+        onGoogleSignIn={signInWithGoogleOAuth}
+      />
     </NavigationMenu>
   );
 }

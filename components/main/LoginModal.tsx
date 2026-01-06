@@ -8,13 +8,15 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 interface LoginModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onGoogleSignIn: () => Promise<void>;
 }
 
-export function LoginModal({ open, onOpenChange }: LoginModalProps) {
+export function LoginModal({ open, onOpenChange, onGoogleSignIn }: LoginModalProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
@@ -25,9 +27,9 @@ export function LoginModal({ open, onOpenChange }: LoginModalProps) {
           </DialogDescription>
         </DialogHeader>
         <div className="py-4">
-          <p className="text-sm text-muted-foreground">
-            Login functionality coming soon.
-          </p>
+          <Button className="w-full" onClick={onGoogleSignIn}>
+            Continue with Google
+          </Button>
         </div>
       </DialogContent>
     </Dialog>
