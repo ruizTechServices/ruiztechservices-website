@@ -19,7 +19,7 @@ export async function updateSupabaseSession(request: NextRequest) {
     });
   }
 
-  let response = NextResponse.next({
+  const response = NextResponse.next({
     request: {
       headers: request.headers,
     },
@@ -33,7 +33,7 @@ export async function updateSupabaseSession(request: NextRequest) {
       setAll(cookiesToSet: CookieToSet[]) {
         cookiesToSet.forEach((cookie) => {
           request.cookies.set(cookie.name, cookie.value);
-          response.cookies.set(cookie.name, cookie.value, cookie.options as any);
+          response.cookies.set(cookie.name, cookie.value, cookie.options as Parameters<typeof response.cookies.set>[2]);
         });
       },
     },
