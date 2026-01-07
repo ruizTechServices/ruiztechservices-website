@@ -2,13 +2,17 @@
 
 import { createSupabaseBrowserClient } from "@/lib/supabase/browser";
 
-export async function signInWithGoogleOAuth() {
+export async function signInWithGoogleOAuth(next?: string) {
   const supabase = createSupabaseBrowserClient();
 
-  const redirectTo =
-    typeof window !== "undefined"
-      ? `${window.location.origin}/auth/callback`
-      : undefined;
+  let redirectTo: string | undefined;
+  if (typeof window !== "undefined") {
+    const callbackUrl = new URL("/auth/callback", window.location.origin);
+    if (next) {
+      callbackUrl.searchParams.set("next", next);
+    }
+    redirectTo = callbackUrl.toString();
+  }
 
   const { error } = await supabase.auth.signInWithOAuth({
     provider: "google",

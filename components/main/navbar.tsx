@@ -1,7 +1,8 @@
 // components/navbar.tsx
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import {
   NavigationMenu,
@@ -18,7 +19,27 @@ import { useAuth } from "@/hooks/use-auth";
 
 export function Navbar() {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [authError, setAuthError] = useState<string | null>(null);
   const { user, loading } = useAuth();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    const error = searchParams.get("auth_error");
+    const errorDescription = searchParams.get("auth_error_description");
+
+    if (error) {
+      const message = errorDescription || error;
+      setAuthError(message);
+      setIsLoginModalOpen(true);
+
+      const url = new URL(window.location.href);
+      url.searchParams.delete("auth_error");
+      url.searchParams.delete("auth_error_description");
+      router.replace(url.pathname + url.search, { scroll: false });
+    }
+  }, [searchParams, router]);
 
   const handleSignOut = async () => {
     try {
@@ -83,7 +104,12 @@ export function Navbar() {
         <LoginModal
           open={isLoginModalOpen}
           onOpenChange={setIsLoginModalOpen}
-          onGoogleSignIn={signInWithGoogleOAuth}
+          onGoogleSignIn={() => {
+            const search = searchParams.toString();
+            const next = `${pathname}${search ? '?' + search : ''}`;
+            return signInWithGoogleOAuth(next);
+          }}
+          initialError={authError}
         />
       )}
     </NavigationMenu>
