@@ -15,7 +15,7 @@ export default function ProjectsPage() {
       <div className="container mx-auto px-4 py-12 md:py-16 max-w-6xl">
         {/* Header */}
         <header className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">
             {projectsPageContent.title}
           </h1>
           <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
@@ -24,7 +24,7 @@ export default function ProjectsPage() {
         </header>
 
         {/* Case Studies Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
           {caseStudies.map((caseStudy) => (
             <CaseStudyCard key={caseStudy.id} caseStudy={caseStudy} />
           ))}

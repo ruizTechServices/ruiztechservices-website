@@ -11,7 +11,7 @@ export function HowItWorks() {
         <p className="text-gray-600 dark:text-gray-300">{howItWorks.subtitle}</p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
         {howItWorks.steps.map((step, index) => (
           <div key={index} className="text-center">
             <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-blue-600 text-white font-bold text-xl mb-4">

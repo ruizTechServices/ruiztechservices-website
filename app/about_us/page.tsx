@@ -11,7 +11,7 @@ export const metadata = {
 export default function AboutUsPage() {
   return (
     <>
-    <main className="max-w-3xl mx-auto p-6 space-y-10">
+    <main className="max-w-3xl mx-auto px-4 sm:px-6 py-8 sm:py-10 space-y-10">
       {/* Hero */}
       <Card>
         <CardHeader className="text-center">
@@ -24,7 +24,7 @@ export default function AboutUsPage() {
 
       {/* What We Do */}
       <section>
-        <h2 className="text-2xl font-semibold">What Is ruizTechServices<span className='animate-blink'>|</span>?</h2>
+        <h2 className="text-xl sm:text-2xl font-semibold">What Is ruizTechServices<span className='animate-blink'>|</span>?</h2>
         <p className="mt-4 text-gray-700">
           ruizTechServices| is a web and AI development company based in New York City. We specialize in custom web development, AI integrations, and on-site tech support.
         </p>
@@ -37,7 +37,7 @@ export default function AboutUsPage() {
 
       {/* Why Us */}
       <section>
-        <h2 className="text-2xl font-semibold">Why ruizTechServices<span className='animate-blink'>|</span>?</h2>
+        <h2 className="text-xl sm:text-2xl font-semibold">Why ruizTechServices<span className='animate-blink'>|</span>?</h2>
         <ul className="mt-4 space-y-2">
           <li>Solo expert: direct access to the founder—no middleman.</li>
           <li>Rapid delivery: lean, efficient turn-around.</li>
@@ -47,7 +47,7 @@ export default function AboutUsPage() {
 
       {/* Our Story */}
       <section>
-        <h2 className="text-2xl font-semibold">Our Story</h2>
+        <h2 className="text-xl sm:text-2xl font-semibold">Our Story</h2>
         <p className="mt-4 text-gray-700">
           Founded September 7, 2024 in NYC’s Bronx—built to deliver top-tier web and AI solutions with a personal touch.
         </p>

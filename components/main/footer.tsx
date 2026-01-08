@@ -9,7 +9,7 @@ export function Footer() {
         <p className="text-sm text-gray-600 dark:text-gray-400">
           &copy; {currentYear} ruizTechServices, LLC. All rights reserved.
         </p>
-        <div className="flex items-center mt-4 space-x-4 md:mt-0">
+        <div className="flex flex-wrap items-center justify-center gap-4 mt-4 md:mt-0">
           <a href="/privacy" className="text-sm text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400">Privacy</a>
           <a href="/terms" className="text-sm text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400">Terms</a>
           <a href="/contact" className="text-sm text-gray-600 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400">Contact</a>

@@ -13,7 +13,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 export function ServiceBuckets() {
   return (
     <section className="py-12 md:py-16">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {serviceBuckets.map((bucket, index) => {
           const IconComponent = iconMap[bucket.icon];
           return (

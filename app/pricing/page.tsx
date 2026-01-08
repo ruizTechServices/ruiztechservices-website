@@ -92,7 +92,7 @@ function PricingSection({
         <p className="text-gray-600 dark:text-gray-300">{description}</p>
         <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 italic">{note}</p>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {tiers.map((tier, index) => (
           <PricingCard key={index} {...tier} />
         ))}
@@ -107,7 +107,7 @@ export default function PricingPage() {
       <div className="container mx-auto px-4 py-12 md:py-16 max-w-6xl">
         {/* Header */}
         <header className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">Pricing</h1>
+          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">Pricing</h1>
           <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mb-4">
             {pricingDisclaimer}
           </p>

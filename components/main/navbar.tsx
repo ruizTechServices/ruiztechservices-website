@@ -4,12 +4,20 @@
 import { useState, useEffect, useCallback } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
+import { Menu } from "lucide-react";
 import {
   NavigationMenu,
   NavigationMenuList,
   NavigationMenuItem,
   NavigationMenuLink,
 } from "@/components/ui/navigation-menu";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { LoginButton } from "@/components/main/LoginButton";
 import { LoginModal } from "@/components/main/LoginModal";
@@ -18,11 +26,20 @@ import { signInWithGoogleOAuth, signOut } from "@/lib/auth/oauth";
 import { useAuth } from "@/hooks/use-auth";
 import { createSupabaseBrowserClient } from "@/lib/supabase/browser";
 
+const navLinks = [
+  { href: "/", label: "Home" },
+  { href: "/about_us", label: "About Us" },
+  { href: "/contact", label: "Contact" },
+  { href: "/projects", label: "Projects" },
+  { href: "/pricing", label: "Pricing" },
+];
+
 export function Navbar() {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   const [checkingRole, setCheckingRole] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { user, loading } = useAuth();
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -78,69 +95,110 @@ export function Navbar() {
     }
   };
 
-  return (
-    <NavigationMenu className="w-full bg-white border-b">
-      <NavigationMenuList className="flex justify-around p-4">
-        <NavigationMenuItem>
-          <NavigationMenuLink asChild>
-            <Link href="/">Home</Link>
-          </NavigationMenuLink>
-        </NavigationMenuItem>
+  const AuthControls = ({ mobile = false }: { mobile?: boolean }) => {
+    if (loading) {
+      return (
+        <Button variant="outline" disabled className={mobile ? "w-full" : ""}>
+          Loading...
+        </Button>
+      );
+    }
 
-        <NavigationMenuItem>
-          <NavigationMenuLink asChild>
-            <Link href="/about_us">About Us</Link>
-          </NavigationMenuLink>
-        </NavigationMenuItem>
-
-        <NavigationMenuItem>
-          <NavigationMenuLink asChild>
-            <Link href="/contact">Contact</Link>
-          </NavigationMenuLink>
-        </NavigationMenuItem>
-
-        <NavigationMenuItem>
-          <NavigationMenuLink asChild>
-            <Link href="/projects">Projects</Link>
-          </NavigationMenuLink>
-        </NavigationMenuItem>
-
-        <NavigationMenuItem>
-          <NavigationMenuLink asChild>
-            <Link href="/pricing">Pricing</Link>
-          </NavigationMenuLink>
-        </NavigationMenuItem>
-
-        <NavigationMenuItem>
-          {loading ? (
-            <Button variant="outline" disabled>
-              Loading...
+    if (user) {
+      return (
+        <div className={`flex ${mobile ? "flex-col gap-3 w-full" : "items-center gap-2"}`}>
+          <span className="text-sm text-gray-600 dark:text-gray-400 truncate max-w-[150px] min-w-0">
+            {user.email}
+          </span>
+          {checkingRole ? (
+            <Button variant="outline" disabled className={mobile ? "w-full" : ""}>
+              Checking...
             </Button>
-          ) : user ? (
-            <div className="flex items-center gap-2">
-              <span className="text-sm text-gray-600">{user.email}</span>
-              {checkingRole ? (
-                <Button variant="outline" disabled>
-                  Checking...
-                </Button>
-              ) : isAdmin ? (
-                <Button asChild variant="outline">
-                  <Link href="/admin">Admin</Link>
-                </Button>
-              ) : (
-                <Button asChild variant="outline">
-                  <Link href="/dashboard">Dashboard</Link>
-                </Button>
-              )}
-              <Button variant="outline" onClick={handleSignOut}>
-                Logout
-              </Button>
-            </div>
+          ) : isAdmin ? (
+            <Button asChild variant="outline" className={mobile ? "w-full" : ""}>
+              <Link href="/admin" onClick={() => setMobileMenuOpen(false)}>Admin</Link>
+            </Button>
           ) : (
-            <LoginButton onClick={() => handleLoginClick(() => setIsLoginModalOpen(true))} />
+            <Button asChild variant="outline" className={mobile ? "w-full" : ""}>
+              <Link href="/dashboard" onClick={() => setMobileMenuOpen(false)}>Dashboard</Link>
+            </Button>
           )}
-        </NavigationMenuItem>
-      </NavigationMenuList>
+          <Button variant="outline" onClick={handleSignOut} className={mobile ? "w-full" : ""}>
+            Logout
+          </Button>
+        </div>
+      );
+    }
+
+    return (
+      <div className={mobile ? "w-full" : ""}>
+        <LoginButton
+          onClick={() => handleLoginClick(() => setIsLoginModalOpen(true))}
+        />
+      </div>
+    );
+  };
+
+  return (
+    <nav className="w-full bg-white dark:bg-gray-900 border-b">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16">
+          {/* Logo / Brand */}
+          <Link href="/" className="font-bold text-lg text-gray-900 dark:text-white">
+            ruizTechServices
+          </Link>
+
+          {/* Desktop Navigation */}
+          <NavigationMenu className="hidden md:flex">
+            <NavigationMenuList className="flex items-center gap-1">
+              {navLinks.map((link) => (
+                <NavigationMenuItem key={link.href}>
+                  <NavigationMenuLink asChild>
+                    <Link
+                      href={link.href}
+                      className="px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                    >
+                      {link.label}
+                    </Link>
+                  </NavigationMenuLink>
+                </NavigationMenuItem>
+              ))}
+              <NavigationMenuItem>
+                <AuthControls />
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
+
+          {/* Mobile Menu Trigger */}
+          <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+            <SheetTrigger asChild className="md:hidden">
+              <Button variant="ghost" size="icon" aria-label="Open menu">
+                <Menu className="h-6 w-6" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-[280px] sm:w-[320px]">
+              <SheetHeader>
+                <SheetTitle>Menu</SheetTitle>
+              </SheetHeader>
+              <nav className="flex flex-col gap-4 mt-6">
+                {navLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="px-3 py-3 text-base font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+                <div className="border-t pt-4 mt-2">
+                  <AuthControls mobile />
+                </div>
+              </nav>
+            </SheetContent>
+          </Sheet>
+        </div>
+      </div>
 
       {!user && (
         <LoginModal
@@ -160,6 +218,6 @@ export function Navbar() {
           initialError={authError}
         />
       )}
-    </NavigationMenu>
+    </nav>
   );
 }

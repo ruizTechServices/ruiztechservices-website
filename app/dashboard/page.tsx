@@ -9,7 +9,7 @@ export const metadata = {
 export default function DashboardPage() {
   return (
     <main className="min-h-screen bg-gradient-to-b from-background to-muted">
-      <div className="max-w-3xl mx-auto p-6 space-y-10">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 py-8 sm:py-10 space-y-10">
         <Card>
           <CardHeader className="text-center">
             <CardTitle>Customer Dashboard</CardTitle>

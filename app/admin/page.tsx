@@ -15,7 +15,7 @@ export default async function AdminPage() {
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-background to-muted">
-      <div className="max-w-4xl mx-auto p-6 space-y-6">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-10 space-y-6">
         <Card>
           <CardHeader className="text-center">
             <CardTitle>Admin Dashboard</CardTitle>

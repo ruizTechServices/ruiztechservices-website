@@ -11,7 +11,7 @@ export default function PrivacyPage() {
     <main className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
       <div className="container mx-auto px-4 py-12 md:py-16 max-w-3xl">
         <header className="mb-10">
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
+          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-2">
             {privacyPolicy.title}
           </h1>
           <p className="text-sm text-gray-500 dark:text-gray-400">
