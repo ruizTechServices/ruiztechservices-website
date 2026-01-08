@@ -15,7 +15,7 @@ type CookieToSet = {
 
 const PROTECTED_PREFIXES = ["/dashboard", "/admin"];
 const ADMIN_PREFIXES = ["/admin"];
-const ADMIN_EMAIL = (process.env.ADMIN_EMAIL || "giosterr44@gmail.com").toLowerCase();
+const DASHBOARD_PREFIXES = ["/dashboard"];
 
 function isProtectedPath(pathname: string): boolean {
   return PROTECTED_PREFIXES.some((prefix) => pathname.startsWith(prefix));
@@ -23,6 +23,10 @@ function isProtectedPath(pathname: string): boolean {
 
 function isAdminPath(pathname: string): boolean {
   return ADMIN_PREFIXES.some((prefix) => pathname.startsWith(prefix));
+}
+
+function isDashboardPath(pathname: string): boolean {
+  return DASHBOARD_PREFIXES.some((prefix) => pathname.startsWith(prefix));
 }
 
 function createErrorRedirect(
@@ -87,15 +91,24 @@ export async function updateSupabaseSession(request: NextRequest) {
       );
     }
 
-    if (isAdminPath(pathname)) {
-      const userEmail = user.email?.toLowerCase();
-      if (userEmail !== ADMIN_EMAIL) {
-        return createErrorRedirect(
-          request.nextUrl.origin,
-          "forbidden",
-          "Admin access only"
-        );
-      }
+    const { data: adminRow } = await supabase
+      .from("admins")
+      .select("user_id")
+      .eq("user_id", user.id)
+      .maybeSingle();
+
+    const isAdmin = !!adminRow;
+
+    if (isAdminPath(pathname) && !isAdmin) {
+      return createErrorRedirect(
+        request.nextUrl.origin,
+        "forbidden",
+        "Admin access only"
+      );
+    }
+
+    if (isDashboardPath(pathname) && isAdmin) {
+      return NextResponse.redirect(new URL("/admin", request.nextUrl.origin));
     }
   }
 

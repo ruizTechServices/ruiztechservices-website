@@ -1,7 +1,7 @@
 // components/navbar.tsx
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import {
@@ -16,10 +16,13 @@ import { LoginModal } from "@/components/main/LoginModal";
 import { handleLoginClick } from "@/lib/auth/handlers";
 import { signInWithGoogleOAuth, signOut } from "@/lib/auth/oauth";
 import { useAuth } from "@/hooks/use-auth";
+import { createSupabaseBrowserClient } from "@/lib/supabase/browser";
 
 export function Navbar() {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [checkingRole, setCheckingRole] = useState(false);
   const { user, loading } = useAuth();
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -40,6 +43,32 @@ export function Navbar() {
       router.replace(url.pathname + url.search, { scroll: false });
     }
   }, [searchParams, router]);
+
+  const checkAdminRole = useCallback(async (userId: string) => {
+    setCheckingRole(true);
+    try {
+      const supabase = createSupabaseBrowserClient();
+      const { data } = await supabase
+        .from("admins")
+        .select("user_id")
+        .eq("user_id", userId)
+        .maybeSingle();
+      setIsAdmin(!!data);
+    } catch (err) {
+      console.error("[Navbar] Error checking admin role:", err);
+      setIsAdmin(false);
+    } finally {
+      setCheckingRole(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!user) {
+      setIsAdmin(false);
+      return;
+    }
+    checkAdminRole(user.id);
+  }, [user, checkAdminRole]);
 
   const handleSignOut = async () => {
     try {
@@ -90,6 +119,19 @@ export function Navbar() {
           ) : user ? (
             <div className="flex items-center gap-2">
               <span className="text-sm text-gray-600">{user.email}</span>
+              {checkingRole ? (
+                <Button variant="outline" disabled>
+                  Checking...
+                </Button>
+              ) : isAdmin ? (
+                <Button asChild variant="outline">
+                  <Link href="/admin">Admin</Link>
+                </Button>
+              ) : (
+                <Button asChild variant="outline">
+                  <Link href="/dashboard">Dashboard</Link>
+                </Button>
+              )}
               <Button variant="outline" onClick={handleSignOut}>
                 Logout
               </Button>
