@@ -86,31 +86,34 @@ export function ContactSubmissionsManager({
       {submissions.map((submission) => (
         <Card key={submission.id} className={isPending ? 'opacity-50' : ''}>
           <CardHeader className="pb-2">
-            <div className="flex items-start justify-between gap-4">
-              <div className="space-y-1">
+            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+              <div className="space-y-1 min-w-0">
                 <CardTitle className="text-lg flex items-center gap-2">
-                  <User className="h-4 w-4" />
-                  {submission.name}
+                  <User className="h-4 w-4 flex-shrink-0" />
+                  <span className="truncate">{submission.name}</span>
+                  <Badge className={`${statusColors[submission.status || 'new']} sm:hidden flex-shrink-0`}>
+                    {submission.status || 'new'}
+                  </Badge>
                 </CardTitle>
-                <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                  <Mail className="h-3 w-3" />
+                <div className="flex items-center gap-2 text-sm text-muted-foreground min-w-0">
+                  <Mail className="h-3 w-3 flex-shrink-0" />
                   <a
                     href={`mailto:${submission.email}`}
-                    className="hover:underline"
+                    className="hover:underline truncate"
                   >
                     {submission.email}
                   </a>
                 </div>
                 <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                  <Clock className="h-3 w-3" />
+                  <Clock className="h-3 w-3 flex-shrink-0" />
                   {submission.created_at
                     ? new Date(submission.created_at).toLocaleString()
                     : 'Unknown date'}
                 </div>
               </div>
 
-              <div className="flex items-center gap-2">
-                <Badge className={statusColors[submission.status || 'new']}>
+              <div className="flex items-center gap-2 flex-shrink-0">
+                <Badge className={`${statusColors[submission.status || 'new']} hidden sm:inline-flex`}>
                   {submission.status || 'new'}
                 </Badge>
 
@@ -124,7 +127,7 @@ export function ContactSubmissionsManager({
                   }
                   disabled={isPending}
                 >
-                  <SelectTrigger className="w-28">
+                  <SelectTrigger className="w-24 sm:w-28">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -144,7 +147,7 @@ export function ContactSubmissionsManager({
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   </AlertDialogTrigger>
-                  <AlertDialogContent>
+                  <AlertDialogContent className="max-w-[90vw] sm:max-w-lg">
                     <AlertDialogHeader>
                       <AlertDialogTitle>Delete submission?</AlertDialogTitle>
                       <AlertDialogDescription>
