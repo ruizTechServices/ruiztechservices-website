@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/main/navbar";
@@ -33,7 +34,9 @@ export default function RootLayout({
       >
         <Providers>
           <div className="w-full flex justify-center">
-            <Navbar />
+            <Suspense fallback={null}>
+              <Navbar />
+            </Suspense>
           </div>
           {children}
           <Footer />

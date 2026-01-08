@@ -1,10 +1,22 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
+function getSafeNext(next: string | null, origin: string): string {
+  if (!next) {
+    return "/";
+  }
+  try {
+    const candidate = new URL(next, origin);
+    return candidate.origin === origin ? candidate.pathname + candidate.search : "/";
+  } catch {
+    return "/";
+  }
+}
+
 export async function GET(request: NextRequest) {
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get("code");
-  const next = requestUrl.searchParams.get("next") ?? "/";
+  const safeNext = getSafeNext(requestUrl.searchParams.get("next"), requestUrl.origin);
 
   const error = requestUrl.searchParams.get("error");
   const errorDescription = requestUrl.searchParams.get("error_description");
@@ -19,7 +31,7 @@ export async function GET(request: NextRequest) {
   }
 
   if (!code) {
-    return NextResponse.redirect(new URL(next, requestUrl.origin));
+    return NextResponse.redirect(new URL(safeNext, requestUrl.origin));
   }
 
   const supabase = await createSupabaseServerClient();
@@ -32,5 +44,5 @@ export async function GET(request: NextRequest) {
     return NextResponse.redirect(errorUrl);
   }
 
-  return NextResponse.redirect(new URL(next, requestUrl.origin));
+  return NextResponse.redirect(new URL(safeNext, requestUrl.origin));
 }

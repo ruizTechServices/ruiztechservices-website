@@ -105,8 +105,14 @@ export function Navbar() {
           open={isLoginModalOpen}
           onOpenChange={setIsLoginModalOpen}
           onGoogleSignIn={() => {
-            const search = searchParams.toString();
-            const next = `${pathname}${search ? '?' + search : ''}`;
+            const nextFromParams = searchParams.get("next");
+            const cleanParams = new URLSearchParams(searchParams.toString());
+            cleanParams.delete("auth_error");
+            cleanParams.delete("auth_error_description");
+            cleanParams.delete("next");
+            const cleanSearch = cleanParams.toString();
+            const currentPath = `${pathname}${cleanSearch ? '?' + cleanSearch : ''}`;
+            const next = nextFromParams || currentPath;
             return signInWithGoogleOAuth(next);
           }}
           initialError={authError}
