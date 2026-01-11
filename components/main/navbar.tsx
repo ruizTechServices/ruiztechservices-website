@@ -25,6 +25,8 @@ import { handleLoginClick } from "@/lib/auth/handlers";
 import { signInWithGoogleOAuth, signOut } from "@/lib/auth/oauth";
 import { useAuth } from "@/hooks/use-auth";
 import { createSupabaseBrowserClient } from "@/lib/supabase/browser";
+import { BalanceBadge } from "@/components/sections/BalanceBadge";
+
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -107,6 +109,7 @@ export function Navbar() {
     if (user) {
       return (
         <div className={`flex ${mobile ? "flex-col gap-3 w-full" : "items-center gap-2"}`}>
+          {!mobile && <BalanceBadge />}
           <span className="text-sm text-gray-600 dark:text-gray-400 truncate max-w-[150px] min-w-0">
             {user.email}
           </span>

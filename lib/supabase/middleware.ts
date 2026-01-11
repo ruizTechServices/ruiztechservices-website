@@ -44,17 +44,11 @@ function createErrorRedirect(
   return NextResponse.redirect(redirectUrl);
 }
 
-export async function updateSupabaseSession(request: NextRequest) {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+import { env } from "@/lib/env";
 
-  if (!url || !anonKey) {
-    return NextResponse.next({
-      request: {
-        headers: request.headers,
-      },
-    });
-  }
+export async function updateSupabaseSession(request: NextRequest) {
+  const url = env.NEXT_PUBLIC_SUPABASE_URL;
+  const anonKey = env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
   const response = NextResponse.next({
     request: {

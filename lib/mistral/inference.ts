@@ -1,6 +1,8 @@
 import { Mistral } from '@mistralai/mistralai';
 
-const apiKey = process.env.MISTRAL_API_KEY;
+import { env } from '@/lib/env';
+
+const apiKey = env.MISTRAL_API_KEY;
 
 if (!apiKey) throw new Error('Missing MISTRAL_API_KEY in environment');
 

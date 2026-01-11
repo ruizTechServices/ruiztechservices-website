@@ -1,24 +1,11 @@
 import { createClient } from '@supabase/supabase-js';
+import { env } from '@/lib/env';
+import { Database } from './database.types';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+export const supabase = createClient<Database>(env.NEXT_PUBLIC_SUPABASE_URL, env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error(
-    'Missing Supabase environment variables. Please check your .env.local file and ensure NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY are set.'
-  );
-}
+// Export generic types from the database schema
+export type ContactSubmission = Database['public']['Tables']['contact_submissions']['Row'];
+export type ContactSubmissionInsert = Database['public']['Tables']['contact_submissions']['Insert'];
+export type ContactSubmissionUpdate = Database['public']['Tables']['contact_submissions']['Update'];
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
-
-// Type definitions for the contact_submissions table
-export interface ContactSubmission {
-  id?: number;
-  created_at?: string;
-  name: string;
-  email: string;
-  message: string;
-  status?: 'new' | 'read' | 'replied';
-  ip_address?: string;
-  user_agent?: string;
-}

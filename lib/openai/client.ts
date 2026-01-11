@@ -1,4 +1,5 @@
 import OpenAI from 'openai';
+import { env } from '@/lib/env';
 
 /**
  * Shared, pre-configured OpenAI client.
@@ -6,7 +7,7 @@ import OpenAI from 'openai';
  * instantiate the SDK once and keep configuration in a single place.
  */
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: env.OPENAI_API_KEY,
 });
 
 export default openai;

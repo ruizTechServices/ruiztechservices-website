@@ -1,6 +1,7 @@
 'use server';
 
-import { supabase, type ContactSubmission } from '@/lib/supabase';
+import { supabase, type ContactSubmissionInsert } from '@/lib/supabase';
+
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
@@ -20,13 +21,13 @@ export async function submitContactForm(
     const name = formData.get('name') as string;
     const email = formData.get('email') as string;
     const rawMessage = formData.get('message') as string;
-    
+
     // Extract pre-qualification fields
     const helpType = formData.get('helpType') as string || 'not specified';
     const supportType = formData.get('supportType') as string || 'not specified';
     const urgency = formData.get('urgency') as string || 'normal';
     const budget = formData.get('budget') as string || 'not specified';
-    
+
     // Build structured message with pre-qualification data
     const message = `--- PRE-QUALIFICATION ---
 Help Type: ${helpType}
@@ -60,7 +61,7 @@ ${rawMessage}`;
     const ipAddress = forwardedFor?.split(',')[0] || realIp || '';
 
     // Prepare submission data
-    const submissionData: Omit<ContactSubmission, 'id' | 'created_at'> = {
+    const submissionData: ContactSubmissionInsert = {
       name: name.trim(),
       email: email.trim().toLowerCase(),
       message: message.trim(),
@@ -112,7 +113,7 @@ ${rawMessage}`;
 // Alternative server action for simple form submission without state
 export async function submitContactFormSimple(formData: FormData) {
   const result = await submitContactForm({}, formData);
-  
+
   if (result.success) {
     redirect('/contact?success=true');
   } else {
