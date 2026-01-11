@@ -100,22 +100,44 @@ export async function createCustomerPortalSession() {
         .eq('user_id', user.id)
         .single();
 
-    if (!profile?.stripe_customer_id) {
-        // If they haven't bought anything yet, they don't have a customer ID.
-        // We could create one, or redirect them to pricing.
-        // For now, let's redirect to pricing with a message.
-        const headersList = await headers();
-        const origin = headersList.get('origin') || process.env.NEXT_PUBLIC_SITE_URL || 'https://ruiztechservices.com';
-        redirect(`${origin}/pricing?message=no_payment_methods`);
-    }
-
     const headersList = await headers();
     const origin = headersList.get('origin') || process.env.NEXT_PUBLIC_SITE_URL || 'https://ruiztechservices.com';
+
+    let customerId = profile?.stripe_customer_id;
+
+    if (!customerId) {
+        console.log('No Stripe customer found, creating one...');
+        // Create a new Stripe Customer
+        const customer = await stripe.customers.create({
+            email: user.email,
+            metadata: {
+                userId: user.id,
+            },
+        });
+        customerId = customer.id;
+
+        // Store the new customer ID
+        // If profile exists (row exists but no customer ID), update. Otherwise insert.
+        if (profile) {
+            await supabase
+                .from('user_credits')
+                .update({ stripe_customer_id: customerId })
+                .eq('user_id', user.id);
+        } else {
+            await supabase
+                .from('user_credits')
+                .insert({
+                    user_id: user.id,
+                    stripe_customer_id: customerId,
+                    credits: 0
+                });
+        }
+    }
 
     let session;
     try {
         session = await stripe.billingPortal.sessions.create({
-            customer: profile.stripe_customer_id,
+            customer: customerId,
             return_url: `${origin}/dashboard`,
         });
     } catch (error) {
