@@ -67,3 +67,12 @@ Fix ESLint errors preventing production build:
 **Result:** ✅ Success
 **Directive Updated:** no
 **Next:** Done.
+
+### Iteration 2 - [Current Date/Time]
+**Task:** Fix server-side exception on `/pricing` page in production.
+**Issue:** `lib/stripe.ts` initialized Stripe with an empty string when `STRIPE_SECRET_KEY` was missing, causing a crash on module load.
+**Action:**
+- Updated `lib/stripe.ts` to use a placeholder key ('sk_test_placeholder') if the env var is missing.
+- Updated `lib/actions/stripe.ts` to wrap Stripe API calls in `try/catch` blocks and redirect with error flags (`checkout_failed`, `portal_failed`) instead of throwing server errors.
+**Result:** Fixed. Page should now load even without Stripe config, and fail gracefully on action.
+**Directive Updated:** no

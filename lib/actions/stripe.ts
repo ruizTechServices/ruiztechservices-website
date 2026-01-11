@@ -10,21 +10,20 @@ export async function createCheckoutSession() {
     const { data: { user } } = await supabase.auth.getUser();
 
     if (!user) {
-        const redirectUrl = new URL('/', 'http://localhost:3000'); // Use a placeholder or extract from headers
+        // Use origin from headers for correct environment redirect
+        const headersList = await headers();
+        const origin = headersList.get('origin') || process.env.NEXT_PUBLIC_SITE_URL || 'https://ruiztechservices.com';
+        
+        const redirectUrl = new URL('/', origin);
         redirectUrl.searchParams.set('auth_error', 'login_required');
         redirectUrl.searchParams.set('auth_error_description', 'Please sign in to purchase credits.');
         redirectUrl.searchParams.set('next', '/pricing');
 
-        // Use origin from headers if available for better URL construction
-        const headersList = await headers();
-        const origin = headersList.get('origin') || 'http://localhost:3000';
-        const finalUrl = new URL('/?auth_error=login_required&auth_error_description=Please+sign+in+to+purchase+credits.&next=/pricing', origin);
-
-        redirect(finalUrl.toString());
+        redirect(redirectUrl.toString());
     }
 
     const headersList = await headers();
-    const origin = headersList.get('origin');
+    const origin = headersList.get('origin') || process.env.NEXT_PUBLIC_SITE_URL || 'https://ruiztechservices.com';
 
     // Check if we already have a Stripe Customer ID for this user
     const { data: profile } = await supabase
@@ -46,34 +45,40 @@ export async function createCheckoutSession() {
 
     // Hardcoded for demo: 100 Credits for $10
     // In production, you would fetch this from Stripe or pass a Price ID
-    const session = await stripe.checkout.sessions.create({
-        payment_method_types: ['card'],
-        ...customerParams,
-        metadata,
-        payment_intent_data: {
-            setup_future_usage: 'on_session',
-        },
-        line_items: [
-            {
-                price_data: {
-                    currency: 'usd',
-                    product_data: {
-                        name: '100 AI Credits',
-                        description: 'Pack of 100 credits for ruizTech AI services',
-                    },
-                    unit_amount: 1000, // $10.00
-                },
-                quantity: 1,
+    let session;
+    try {
+        session = await stripe.checkout.sessions.create({
+            payment_method_types: ['card'],
+            ...customerParams,
+            metadata,
+            payment_intent_data: {
+                setup_future_usage: 'on_session',
             },
-        ],
-        mode: 'payment',
-        success_url: `${origin}/dashboard?success=true`,
-        cancel_url: `${origin}/pricing?canceled=true`,
-        client_reference_id: user.id,
-        customer_email: user.email,
-    });
+            line_items: [
+                {
+                    price_data: {
+                        currency: 'usd',
+                        product_data: {
+                            name: '100 AI Credits',
+                            description: 'Pack of 100 credits for ruizTech AI services',
+                        },
+                        unit_amount: 1000, // $10.00
+                    },
+                    quantity: 1,
+                },
+            ],
+            mode: 'payment',
+            success_url: `${origin}/dashboard?success=true`,
+            cancel_url: `${origin}/pricing?canceled=true`,
+            client_reference_id: user.id,
+            customer_email: user.email,
+        });
+    } catch (error) {
+        console.error('Stripe Checkout Error:', error);
+        redirect(`${origin}/pricing?error=checkout_failed`);
+    }
 
-    if (!session.url) {
+    if (!session?.url) {
         throw new Error('Failed to create checkout session');
     }
 
@@ -100,19 +105,25 @@ export async function createCustomerPortalSession() {
         // We could create one, or redirect them to pricing.
         // For now, let's redirect to pricing with a message.
         const headersList = await headers();
-        const origin = headersList.get('origin') || 'http://localhost:3000';
+        const origin = headersList.get('origin') || process.env.NEXT_PUBLIC_SITE_URL || 'https://ruiztechservices.com';
         redirect(`${origin}/pricing?message=no_payment_methods`);
     }
 
     const headersList = await headers();
-    const origin = headersList.get('origin') || 'http://localhost:3000';
+    const origin = headersList.get('origin') || process.env.NEXT_PUBLIC_SITE_URL || 'https://ruiztechservices.com';
 
-    const session = await stripe.billingPortal.sessions.create({
-        customer: profile.stripe_customer_id,
-        return_url: `${origin}/dashboard`,
-    });
+    let session;
+    try {
+        session = await stripe.billingPortal.sessions.create({
+            customer: profile.stripe_customer_id,
+            return_url: `${origin}/dashboard`,
+        });
+    } catch (error) {
+        console.error('Stripe Portal Error:', error);
+        redirect(`${origin}/pricing?error=portal_failed`);
+    }
 
-    if (!session.url) {
+    if (!session?.url) {
         throw new Error('Failed to create customer portal session');
     }
 
