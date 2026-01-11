@@ -11,6 +11,7 @@ import Link from "next/link";
 import { BalanceBadge } from "@/components/sections/BalanceBadge";
 import { ChatSidebar } from "@/components/chat/ChatSidebar";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { MarkdownRenderer } from "@/components/chat/MarkdownRenderer";
 
 const MODEL_OPTIONS = [
   { value: "gpt-4o", label: "OpenAI GPT-4o" },
@@ -141,10 +142,15 @@ export const ChatbotPanel: React.FC = () => {
                     className={`rounded-lg px-4 py-2 max-w-[85%] sm:max-w-[75%] text-sm ${
                     msg.role === 'user'
                         ? 'bg-primary text-primary-foreground'
-                        : 'bg-muted text-foreground border'
+                        : 'bg-muted text-foreground border w-full'
                     } ${msg.status === 'error' ? 'border-destructive/50 bg-destructive/10 text-destructive' : ''}`}
                 >
-                    {msg.content}
+                    {msg.role === 'assistant' ? (
+                        <MarkdownRenderer content={msg.content} />
+                    ) : (
+                        <div className="whitespace-pre-wrap">{msg.content}</div>
+                    )}
+                    
                     {msg.status === 'error' && (
                         <p className="text-xs mt-1 opacity-70">Failed to send</p>
                     )}
