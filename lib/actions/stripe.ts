@@ -73,9 +73,72 @@ export async function createCheckoutSession() {
             client_reference_id: user.id,
             // customer_email is already handled in customerParams if needed (mutually exclusive with customer)
         });
-    } catch (error) {
+    } catch (error: any) {
         console.error('Stripe Checkout Error:', error);
-        redirect(`${origin}/pricing?error=checkout_failed`);
+
+        // Handle "No such customer" error (sync issue between DB and Stripe)
+        if (error?.code === 'resource_missing' && error?.param === 'customer') {
+            console.log('Stripe customer missing in checkout, recreating...');
+            
+            // Create a new Stripe Customer
+            const newCustomer = await stripe.customers.create({
+                email: user.email,
+                metadata: {
+                    userId: user.id,
+                },
+            });
+            const newCustomerId = newCustomer.id;
+
+            // Update Supabase with the new valid ID
+            if (profile) {
+                await supabase
+                    .from('user_credits')
+                    .update({ stripe_customer_id: newCustomerId })
+                    .eq('user_id', user.id);
+            } else {
+                await supabase
+                    .from('user_credits')
+                    .insert({
+                        user_id: user.id,
+                        stripe_customer_id: newCustomerId,
+                        credits: 0
+                    });
+            }
+
+            // Retry creating the checkout session with the new ID
+            try {
+                session = await stripe.checkout.sessions.create({
+                    payment_method_types: ['card'],
+                    customer: newCustomerId, // Use the new ID explicitly
+                    metadata,
+                    payment_intent_data: {
+                        setup_future_usage: 'on_session',
+                    },
+                    line_items: [
+                        {
+                            price_data: {
+                                currency: 'usd',
+                                product_data: {
+                                    name: '100 AI Credits',
+                                    description: 'Pack of 100 credits for ruizTech AI services',
+                                },
+                                unit_amount: 1000,
+                            },
+                            quantity: 1,
+                        },
+                    ],
+                    mode: 'payment',
+                    success_url: `${origin}/dashboard?success=true`,
+                    cancel_url: `${origin}/pricing?canceled=true`,
+                    client_reference_id: user.id,
+                });
+            } catch (retryError) {
+                console.error('Retry Stripe Checkout Error:', retryError);
+                redirect(`${origin}/pricing?error=checkout_failed_retry`);
+            }
+        } else {
+            redirect(`${origin}/pricing?error=checkout_failed`);
+        }
     }
 
     if (!session?.url) {
@@ -140,9 +203,51 @@ export async function createCustomerPortalSession() {
             customer: customerId,
             return_url: `${origin}/dashboard`,
         });
-    } catch (error) {
+    } catch (error: any) {
         console.error('Stripe Portal Error:', error);
-        redirect(`${origin}/pricing?error=portal_failed`);
+        
+        // Handle "No such customer" error (sync issue between DB and Stripe)
+        if (error?.code === 'resource_missing' && error?.param === 'customer') {
+            console.log('Stripe customer missing, recreating...');
+            
+            // Create a new Stripe Customer
+            const newCustomer = await stripe.customers.create({
+                email: user.email,
+                metadata: {
+                    userId: user.id,
+                },
+            });
+            const newCustomerId = newCustomer.id;
+
+            // Update Supabase with the new valid ID
+            if (profile) {
+                await supabase
+                    .from('user_credits')
+                    .update({ stripe_customer_id: newCustomerId })
+                    .eq('user_id', user.id);
+            } else {
+                await supabase
+                    .from('user_credits')
+                    .insert({
+                        user_id: user.id,
+                        stripe_customer_id: newCustomerId,
+                        credits: 0
+                    });
+            }
+
+            // Retry creating the portal session with the new ID
+            try {
+                session = await stripe.billingPortal.sessions.create({
+                    customer: newCustomerId,
+                    return_url: `${origin}/dashboard`,
+                });
+            } catch (retryError) {
+                console.error('Retry Stripe Portal Error:', retryError);
+                redirect(`${origin}/pricing?error=portal_failed_retry`);
+            }
+        } else {
+            redirect(`${origin}/pricing?error=portal_failed`);
+        }
     }
 
     if (!session?.url) {
