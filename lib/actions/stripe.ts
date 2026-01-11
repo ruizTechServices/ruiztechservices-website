@@ -71,7 +71,7 @@ export async function createCheckoutSession() {
             success_url: `${origin}/dashboard?success=true`,
             cancel_url: `${origin}/pricing?canceled=true`,
             client_reference_id: user.id,
-            customer_email: user.email,
+            // customer_email is already handled in customerParams if needed (mutually exclusive with customer)
         });
     } catch (error) {
         console.error('Stripe Checkout Error:', error);

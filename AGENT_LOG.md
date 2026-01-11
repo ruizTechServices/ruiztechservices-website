@@ -76,3 +76,10 @@ Fix ESLint errors preventing production build:
 - Updated `lib/actions/stripe.ts` to wrap Stripe API calls in `try/catch` blocks and redirect with error flags (`checkout_failed`, `portal_failed`) instead of throwing server errors.
 **Result:** Fixed. Page should now load even without Stripe config, and fail gracefully on action.
 **Directive Updated:** no
+
+### Iteration 3 - [Current Date/Time]
+**Task:** Fix Stripe "Invalid request" error (conflicting parameters).
+**Issue:** `createCheckoutSession` was sending both `customer` (from `customerParams`) and `customer_email` (explicitly), which Stripe forbids.
+**Action:** Removed the explicit `customer_email` field from the session creation call. It is now handled exclusively via `customerParams` (mutually exclusive logic).
+**Result:** Fixed. Stripe request will now contain only one of the two parameters.
+**Directive Updated:** no
