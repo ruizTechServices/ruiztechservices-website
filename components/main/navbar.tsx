@@ -33,6 +33,7 @@ const navLinks = [
   { href: "/about_us", label: "About Us" },
   { href: "/contact", label: "Contact" },
   { href: "/projects", label: "Projects" },
+  { href: "/chat", label: "AI Chat" },
   { href: "/pricing", label: "Pricing" },
 ];
 

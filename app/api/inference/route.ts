@@ -24,11 +24,17 @@ export async function POST(req: NextRequest) {
       }, { status: 402 });
     }
 
-    const { input, options } = await req.json();
+    const { input, messages: incomingMessages, options } = await req.json();
 
-    // Basic mapping for legacy single-input support
-    const content = typeof input === 'string' ? input : JSON.stringify(input);
-    const messages = [{ role: 'user', content } as const];
+    const messages = incomingMessages ?? (
+      typeof input === 'string'
+        ? [{ role: 'user', content: input }]
+        : []
+    );
+
+    if (!Array.isArray(messages) || messages.length === 0) {
+      return NextResponse.json({ error: 'messages array or input string required' }, { status: 400 });
+    }
 
     const provider = AIProviderFactory.getProvider('openai');
     const output = await provider.generateText(messages, {
