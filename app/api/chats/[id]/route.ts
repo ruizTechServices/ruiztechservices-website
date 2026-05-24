@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createSupabaseServerClient } from '@/lib/supabase/server';
+import { requireAdminUser } from '@/lib/auth/admin';
 import { getChat, getMessages, deleteChat } from '@/lib/db/chats';
 
 // GET /api/chats/[id] - Get chat details and messages
@@ -9,12 +9,9 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    const supabase = await createSupabaseServerClient();
-    const { data: { user } } = await supabase.auth.getUser();
-
-    if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const admin = await requireAdminUser();
+    if (!admin.ok) return admin.response;
+    const { user } = admin;
 
     // Verify ownership and existence
     const chat = await getChat(id, user.id);
@@ -38,12 +35,9 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    const supabase = await createSupabaseServerClient();
-    const { data: { user } } = await supabase.auth.getUser();
-
-    if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const admin = await requireAdminUser();
+    if (!admin.ok) return admin.response;
+    const { user } = admin;
 
     await deleteChat(id, user.id);
     return NextResponse.json({ success: true });

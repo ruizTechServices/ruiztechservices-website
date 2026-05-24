@@ -1,16 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createSupabaseServerClient } from '@/lib/supabase/server';
-import { getChats, createChat, deleteChat } from '@/lib/db/chats';
+import { requireAdminUser } from '@/lib/auth/admin';
+import { getChats, createChat } from '@/lib/db/chats';
 
 // GET /api/chats - List all chats for the current user
 export async function GET(req: NextRequest) {
   try {
-    const supabase = await createSupabaseServerClient();
-    const { data: { user } } = await supabase.auth.getUser();
-
-    if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const admin = await requireAdminUser();
+    if (!admin.ok) return admin.response;
+    const { user } = admin;
 
     const chats = await getChats(user.id);
     return NextResponse.json({ chats });
@@ -23,12 +20,9 @@ export async function GET(req: NextRequest) {
 // POST /api/chats - Create a new chat
 export async function POST(req: NextRequest) {
   try {
-    const supabase = await createSupabaseServerClient();
-    const { data: { user } } = await supabase.auth.getUser();
-
-    if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const admin = await requireAdminUser();
+    if (!admin.ok) return admin.response;
+    const { user } = admin;
 
     const { title } = await req.json();
     const chat = await createChat(user.id, title);

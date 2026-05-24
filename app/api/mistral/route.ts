@@ -1,17 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { AIProviderFactory, AIMessage } from '@/lib/ai';
-import { createSupabaseServerClient } from '@/lib/supabase/server';
+import { requireAdminUser } from '@/lib/auth/admin';
 
 // POST /api/mistral
 // Body: { messages: AIMessage[], model?: string }
 export async function POST(req: NextRequest) {
   try {
-    const supabase = await createSupabaseServerClient();
-    const { data: { user } } = await supabase.auth.getUser();
-
-    if (!user) {
-      return NextResponse.json({ error: 'Unauthorized. Please log in.' }, { status: 401 });
-    }
+    const admin = await requireAdminUser();
+    if (!admin.ok) return admin.response;
+    const { supabase, user } = admin;
 
     // Check credits
     const { data: profile, error: profileError } = await supabase
@@ -53,4 +50,3 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }
-

@@ -30,7 +30,7 @@ export default function TechRescueSprintPage() {
         <JobProblems
           items={job.problemsSolved}
           title="What this fixes"
-          intro="Most local businesses are one dead laptop or forgotten password away from a bad week. This sprint closes those gaps."
+          intro="Most local businesses lose leads when their site, profile, forms, links, or payment flow quietly breaks. This sprint closes those gaps."
         />
 
         {/* Who this is for */}

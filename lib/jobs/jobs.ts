@@ -37,11 +37,11 @@ export interface Job {
   headline: string;
   /** Hero supporting line. */
   subheadline: string;
-  /** Human-readable price, e.g. "$1,800 flat". */
+  /** Human-readable price, e.g. "$300 flat". */
   priceLabel: string;
-  /** Human-readable deposit, e.g. "$600 deposit to start". */
+  /** Human-readable deposit, e.g. "$150 deposit to start". */
   depositLabel: string;
-  /** Human-readable timeline, e.g. "5 business days". */
+  /** Human-readable timeline, e.g. "1-2 business days". */
   timelineLabel: string;
   /** Who the offer is a good fit for. */
   idealFor: string[];
@@ -64,38 +64,37 @@ export const jobs: Job[] = [
     navLabel: "Tech Rescue Sprint",
     title: "Local Business Tech Rescue Sprint",
     shortTitle: "Tech Rescue Sprint",
-    headline: "Your business tech is a mess. I fix it in one focused week.",
+    headline: "Get your online customer flow working in 1-2 business days.",
     subheadline:
-      "A fixed-scope, fixed-price sprint that stabilizes the systems your local business runs on—email, devices, backups, accounts, and the glitches that keep costing you hours.",
-    priceLabel: "$1,800 flat",
-    depositLabel: "$600 deposit to start",
-    timelineLabel: "5 business days",
+      "A fixed-scope sprint for the parts of your online presence that turn visitors into customers: website and mobile basics, Google Business Profile, forms, booking links, payment links, broken buttons, and the contact flow from click to reply.",
+    priceLabel: "$300 flat",
+    depositLabel: "$150 deposit to start",
+    timelineLabel: "1-2 business days after agreement/payment/access",
     idealFor: [
-      "NYC-area small businesses with 1–20 employees",
-      "Owners who've been limping along on duct-tape tech setups",
-      "Teams with no in-house IT and no time to manage vendors",
-      "Anyone who just inherited or lost the 'person who handled the computers'",
+      "Local service businesses that need more first-cash-flow opportunities from their existing online presence",
+      "Owners with a website or profile that is live but not reliably turning visitors into inquiries",
+      "Businesses whose forms, booking links, payment links, or buttons may be losing leads",
+      "Teams that need a quick cleanup before ads, referrals, or outreach",
     ],
     problemsSolved: [
-      "Email, logins, and accounts scattered with no clear owner or recovery path",
-      "No real backups—one dead laptop away from losing everything",
-      "Recurring glitches, slow machines, and 'just restart it' workarounds",
-      "Security gaps: shared passwords, no 2FA, ex-employees still with access",
-      "Software and subscriptions nobody fully understands or controls",
+      "Google Business Profile details, service links, photos, or contact options are incomplete or inconsistent",
+      "Website pages are hard to use on mobile or unclear about what customers should do next",
+      "Forms, booking links, payment links, and call/email buttons are missing, broken, or buried",
+      "Customer contact flow leaks inquiries because confirmations, follow-up steps, or routing are unclear",
+      "Online presence is scattered across pages, profiles, and links that do not match",
     ],
     deliverables: [
-      "Full audit of devices, accounts, email, and critical software",
-      "Consolidated, documented account ownership with secure password management",
-      "Automated backups configured and verified for your critical data",
-      "2FA and baseline security hardening across key accounts",
-      "Top recurring issues diagnosed and fixed during the sprint",
-      "A plain-English 'state of your tech' report with prioritized next steps",
+      "Audit of your website/mobile experience, Google Business Profile, key links, and contact paths",
+      "Fixes to broken buttons, forms, booking links, payment links, and obvious mobile friction where access allows",
+      "Basic Google Business Profile cleanup recommendations or updates when you provide access",
+      "A clearer customer contact flow from discovery to inquiry, booking, or payment",
+      "Plain-English summary of what was fixed, what changed, and the next steps that should wait",
     ],
     exclusions: [
-      "Custom software or web app development",
-      "Ongoing managed IT or 24/7 support (available as a separate retainer)",
-      "New hardware purchases (recommendations included; cost of equipment is separate)",
-      "Large-scale data migrations beyond the sprint scope",
+      "Full website rebuilds, custom web app development, or new brand design",
+      "Paid ad setup or SEO campaigns",
+      "Complex payment processor, booking system, or CRM migrations",
+      "Ongoing support or managed IT (available separately if needed)",
     ],
     primaryCta: {
       label: "Book the Rescue Sprint",

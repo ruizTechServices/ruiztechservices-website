@@ -1,18 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { AIProviderFactory } from '@/lib/ai';
-import { createSupabaseServerClient } from '@/lib/supabase/server';
 import { createChat, createMessage, getChat, getMessages } from '@/lib/db/chats';
 import { generateEmbedding } from '@/lib/ai/embedding';
 import { AIMessage } from '@/lib/ai/types';
+import { requireAdminUser } from '@/lib/auth/admin';
 
 export async function POST(req: NextRequest) {
   try {
-    const supabase = await createSupabaseServerClient();
-    const { data: { user } } = await supabase.auth.getUser();
-
-    if (!user) {
-      return NextResponse.json({ error: 'Unauthorized. Please log in.' }, { status: 401 });
-    }
+    const admin = await requireAdminUser();
+    if (!admin.ok) return admin.response;
+    const { supabase, user } = admin;
 
     // Check credits
     const { data: profile, error: profileError } = await supabase
