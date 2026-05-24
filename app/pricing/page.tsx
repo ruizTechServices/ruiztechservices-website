@@ -3,7 +3,6 @@ import Link from "next/link";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
-import { CreditPurchaseCard } from "@/components/sections/CreditPurchaseCard";
 
 import {
   pricingDisclaimer,
@@ -141,17 +140,6 @@ export default function PricingPage() {
           note={buildTiers.note}
           tiers={buildTiers.tiers}
         />
-
-        {/* AI Credits Paywall Section */}
-        <section className="mb-20">
-          <div className="text-center mb-10">
-            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">AI Services</h2>
-            <p className="text-gray-600 dark:text-gray-300">Fuel your technical projects with our developer-first AI tools.</p>
-          </div>
-          <div className="max-w-md mx-auto">
-            <CreditPurchaseCard />
-          </div>
-        </section>
 
         {/* CTA */}
         <section className="text-center py-12 bg-gray-100 dark:bg-gray-800 rounded-lg">
