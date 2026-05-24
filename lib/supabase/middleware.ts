@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { env } from "@/lib/env";
 
 /**
  * Middleware only refreshes sessions; authorization is enforced via Supabase RLS.
@@ -44,17 +45,22 @@ function createErrorRedirect(
   return NextResponse.redirect(redirectUrl);
 }
 
-import { env } from "@/lib/env";
-
 export async function updateSupabaseSession(request: NextRequest) {
-  const url = env.NEXT_PUBLIC_SUPABASE_URL;
-  const anonKey = env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const pathname = request.nextUrl.pathname;
+  const fullPath = pathname + request.nextUrl.search;
 
   const response = NextResponse.next({
     request: {
       headers: request.headers,
     },
   });
+
+  if (!isProtectedPath(pathname)) {
+    return response;
+  }
+
+  const url = env.NEXT_PUBLIC_SUPABASE_URL;
+  const anonKey = env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
   const supabase = createServerClient(url, anonKey, {
     cookies: {
@@ -70,40 +76,35 @@ export async function updateSupabaseSession(request: NextRequest) {
     },
   });
 
-  const { data: { user } } = await supabase.auth.getUser();
+  const { data: claimsData, error: claimsError } = await supabase.auth.getClaims();
 
-  const pathname = request.nextUrl.pathname;
-  const fullPath = pathname + request.nextUrl.search;
+  if (claimsError || !claimsData?.claims.sub) {
+    return createErrorRedirect(
+      request.nextUrl.origin,
+      "login_required",
+      "Please sign in",
+      fullPath
+    );
+  }
 
-  if (isProtectedPath(pathname)) {
-    if (!user) {
-      return createErrorRedirect(
-        request.nextUrl.origin,
-        "login_required",
-        "Please sign in",
-        fullPath
-      );
-    }
+  const { data: adminRow } = await supabase
+    .from("admins")
+    .select("user_id")
+    .eq("user_id", claimsData.claims.sub)
+    .maybeSingle();
 
-    const { data: adminRow } = await supabase
-      .from("admins")
-      .select("user_id")
-      .eq("user_id", user.id)
-      .maybeSingle();
+  const isAdmin = !!adminRow;
 
-    const isAdmin = !!adminRow;
+  if (isAdminPath(pathname) && !isAdmin) {
+    return createErrorRedirect(
+      request.nextUrl.origin,
+      "forbidden",
+      "Admin access only"
+    );
+  }
 
-    if (isAdminPath(pathname) && !isAdmin) {
-      return createErrorRedirect(
-        request.nextUrl.origin,
-        "forbidden",
-        "Admin access only"
-      );
-    }
-
-    if (isDashboardPath(pathname) && isAdmin) {
-      return NextResponse.redirect(new URL("/admin", request.nextUrl.origin));
-    }
+  if (isDashboardPath(pathname) && isAdmin) {
+    return NextResponse.redirect(new URL("/admin", request.nextUrl.origin));
   }
 
   return response;
