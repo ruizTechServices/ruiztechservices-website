@@ -64,23 +64,23 @@ export const howItWorks = {
 };
 
 export const trustSignals = {
-  headline: "Why Work With Me",
+  headline: "What to expect",
   points: [
     {
-      title: "Direct Access",
-      description: "You talk to me—not a sales rep, not a junior dev. One point of contact.",
+      title: "Direct help",
+      description: "You work with the person reviewing and fixing the issue.",
     },
     {
       title: "NYC-Based",
-      description: "On-site support when you need it. I show up.",
+      description: "Local support for homes and small businesses in NYC.",
     },
     {
-      title: "No Lock-In",
-      description: "Month-to-month advisory. Project-based builds. Leave when you want.",
+      title: "Plain explanations",
+      description: "I explain what I found, what I fixed, and what still needs attention.",
     },
     {
-      title: "Async-First",
-      description: "Most work happens async. Meetings only when they add value.",
+      title: "Clear scope",
+      description: "If the issue needs a specialist, replacement parts, or more time, I say so.",
     },
   ],
 };

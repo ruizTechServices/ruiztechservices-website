@@ -1,14 +1,14 @@
 // lib/jobs/jobs.ts
 // Centralized, static configuration for ruizTechServices' active paid service jobs.
 //
-// This file is the single source of truth for the marketing layer:
-//   - The homepage (app/page.tsx) derives its layout from the active jobs here.
+// This file is the single source of truth for public service/job data:
+//   - The homepage (app/page.tsx) uses active jobs for secondary service cards.
 //   - The public navbar (components/main/navbar.tsx) builds its links from here.
 //   - Each job landing page (e.g. app/tech-rescue-sprint/page.tsx) renders from here.
 //
 // To launch a new service, add a new entry to the `jobs` array with status
-// "active". The navbar gains a link automatically and, once more than one job is
-// active, the homepage switches from a single-job pitch to a job catalog.
+// "active". The navbar gains a link automatically and the homepage can show it
+// as a secondary service card.
 
 export type JobStatus = "active" | "draft" | "hidden" | "archived";
 
@@ -25,7 +25,7 @@ export interface Job {
   /** Absolute path to the job's landing page. */
   href: string;
   status: JobStatus;
-  /** When true, the job is eligible to headline the homepage / be featured. */
+  /** When true, the job is eligible for featured placement outside the homepage. */
   featured: boolean;
   /** Short label used in the navigation bar. */
   navLabel: string;
@@ -109,7 +109,7 @@ export function getActiveJobs(): Job[] {
 }
 
 /**
- * The single job that should headline the homepage.
+ * The preferred featured job for non-homepage placements.
  * Prefers an active + featured job; falls back to the first active job.
  */
 export function getFeaturedJob(): Job | undefined {
