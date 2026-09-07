@@ -34,7 +34,7 @@ function createErrorRedirect(
   origin: string,
   error: string,
   description: string,
-  next?: string
+  next?: string,
 ): NextResponse {
   const redirectUrl = new URL("/", origin);
   redirectUrl.searchParams.set("auth_error", error);
@@ -45,15 +45,16 @@ function createErrorRedirect(
   return NextResponse.redirect(redirectUrl);
 }
 
+function withSessionCookies(source: NextResponse, destination: NextResponse) {
+  source.cookies.getAll().forEach((cookie) => destination.cookies.set(cookie));
+  return destination;
+}
+
 export async function updateSupabaseSession(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   const fullPath = pathname + request.nextUrl.search;
 
-  const response = NextResponse.next({
-    request: {
-      headers: request.headers,
-    },
-  });
+  let response = NextResponse.next({ request });
 
   if (!isProtectedPath(pathname)) {
     return response;
@@ -70,20 +71,33 @@ export async function updateSupabaseSession(request: NextRequest) {
       setAll(cookiesToSet: CookieToSet[]) {
         cookiesToSet.forEach((cookie) => {
           request.cookies.set(cookie.name, cookie.value);
-          response.cookies.set(cookie.name, cookie.value, cookie.options as Parameters<typeof response.cookies.set>[2]);
+        });
+        // Forward the refreshed request cookies to Server Components as well
+        // as returning them to the browser. Keep any earlier cookie updates.
+        response = withSessionCookies(response, NextResponse.next({ request }));
+        cookiesToSet.forEach((cookie) => {
+          response.cookies.set(
+            cookie.name,
+            cookie.value,
+            cookie.options as Parameters<typeof response.cookies.set>[2],
+          );
         });
       },
     },
   });
 
-  const { data: claimsData, error: claimsError } = await supabase.auth.getClaims();
+  const { data: claimsData, error: claimsError } =
+    await supabase.auth.getClaims();
 
   if (claimsError || !claimsData?.claims.sub) {
-    return createErrorRedirect(
-      request.nextUrl.origin,
-      "login_required",
-      "Please sign in",
-      fullPath
+    return withSessionCookies(
+      response,
+      createErrorRedirect(
+        request.nextUrl.origin,
+        "login_required",
+        "Please sign in",
+        fullPath,
+      ),
     );
   }
 
@@ -96,15 +110,21 @@ export async function updateSupabaseSession(request: NextRequest) {
   const isAdmin = !!adminRow;
 
   if (isAdminPath(pathname) && !isAdmin) {
-    return createErrorRedirect(
-      request.nextUrl.origin,
-      "forbidden",
-      "Admin access only"
+    return withSessionCookies(
+      response,
+      createErrorRedirect(
+        request.nextUrl.origin,
+        "forbidden",
+        "Admin access only",
+      ),
     );
   }
 
   if (isDashboardPath(pathname) && isAdmin) {
-    return NextResponse.redirect(new URL("/admin", request.nextUrl.origin));
+    return withSessionCookies(
+      response,
+      NextResponse.redirect(new URL("/admin", request.nextUrl.origin)),
+    );
   }
 
   return response;

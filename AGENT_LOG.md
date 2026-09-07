@@ -100,3 +100,10 @@ Fix ESLint errors preventing production build:
 - Added a versioned modern PNG icon and an opaque Apple touch icon using Next.js file conventions; retained the standard multi-size ICO route.
 - Saved the selected design master and reproducible export commands in `docs/favicon.md`.
 - Inspected the 16 pixel export and checked asset dimensions and opacity. No application logic, database, or auth changes.
+
+## 2026-09-07 — Authentication investigation
+
+- Reconfirmed the existing Supabase project is inactive and its auth endpoint returns 502; reproduced the production failure before Google OAuth.
+- Identified the owning organization as `ruizTechServices's Org`; the current connection lists only `Gio'sPrivateOrg`.
+- Fixed middleware session-cookie propagation to Server Components and preservation on redirects, with five targeted regressions using real Next request/response handling.
+- Kept the current database, auth provider, callback, and role decisions. See `docs/auth-investigation.md` for evidence and the required project-restoration step.
