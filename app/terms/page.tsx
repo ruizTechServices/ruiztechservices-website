@@ -1,10 +1,13 @@
 // app/terms/page.tsx
 import { termsOfService } from "@/lib/content/legal";
 
-export const metadata = {
-  title: `${termsOfService.title} | ruizTechServices`,
-  description: termsOfService.description,
-};
+import { pageMetadata } from "@/lib/content/site";
+
+export const metadata = pageMetadata(
+  termsOfService.title,
+  termsOfService.description,
+  "/terms",
+);
 
 export default function TermsPage() {
   return (

@@ -1,61 +1,102 @@
-// components/sections/CaseStudyCard.tsx
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import Image from "next/image";
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 import type { CaseStudy } from "@/lib/content/caseStudies";
 
-interface CaseStudyCardProps {
+export function CaseStudyCard({
+  caseStudy,
+  compact = false,
+}: {
   caseStudy: CaseStudy;
-}
-
-export function CaseStudyCard({ caseStudy }: CaseStudyCardProps) {
+  compact?: boolean;
+}) {
   return (
-    <Card className="h-full flex flex-col">
-      <CardHeader className="pb-3">
-        <div className="flex items-center justify-between mb-2">
-          <Badge variant="secondary" className="text-xs">
-            {caseStudy.industry}
-          </Badge>
-        </div>
-        <CardTitle className="text-lg">{caseStudy.clientType}</CardTitle>
-      </CardHeader>
-      <CardContent className="flex-grow space-y-4">
-        <div>
-          <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-1">
-            Problem
-          </h4>
-          <p className="text-sm text-gray-600 dark:text-gray-300">
-            {caseStudy.problem}
-          </p>
-        </div>
-
-        <div>
-          <h4 className="text-sm font-semibold text-gray-900 dark:text-white mb-1">
-            Solution
-          </h4>
-          <p className="text-sm text-gray-600 dark:text-gray-300">
-            {caseStudy.solution}
-          </p>
-        </div>
-
-        <div>
-          <h4 className="text-sm font-semibold text-green-700 dark:text-green-400 mb-1">
-            Outcome
-          </h4>
-          <p className="text-sm text-gray-700 dark:text-gray-200 font-medium">
-            {caseStudy.outcome}
-          </p>
-        </div>
-
-        <div className="pt-2 border-t">
-          <div className="flex flex-wrap gap-1">
-            {caseStudy.services.map((service, index) => (
-              <Badge key={index} variant="outline" className="text-xs">
-                {service}
-              </Badge>
-            ))}
+    <article
+      className={`project-card ${compact ? "project-compact" : ""}`}
+      id={caseStudy.id}
+    >
+      {caseStudy.image && (
+        <Link
+          href={`/projects#${caseStudy.id}`}
+          className="project-image"
+          aria-label={`Explore ${caseStudy.title}`}
+        >
+          <Image
+            src={caseStudy.image.src}
+            alt={caseStudy.image.alt}
+            width={caseStudy.image.width}
+            height={caseStudy.image.height}
+            sizes="(max-width: 760px) 100vw, 50vw"
+          />
+        </Link>
+      )}
+      <div className="project-content">
+        <p className="eyebrow">{caseStudy.category}</p>
+        <h3>{caseStudy.title}</h3>
+        <p className="project-summary">{caseStudy.summary}</p>
+        {!compact && (
+          <div className="project-story">
+            <div>
+              <h4>The problem</h4>
+              <p>{caseStudy.problem}</p>
+            </div>
+            <div>
+              <h4>My implementation</h4>
+              <p>{caseStudy.implementation}</p>
+            </div>
+            <div>
+              <h4>Try it / inspect it</h4>
+              <p>{caseStudy.demonstration}</p>
+            </div>
           </div>
+        )}
+        <ul className="tech-tags" aria-label="Technologies">
+          {caseStudy.technologies.map((tech) => (
+            <li key={tech}>{tech}</li>
+          ))}
+        </ul>
+        <div className="project-links">
+          {compact ? (
+            <Link href={`/projects#${caseStudy.id}`} className="text-link">
+              Explore the project
+              <ArrowUpRight size={18} aria-hidden="true" />
+            </Link>
+          ) : (
+            <>
+              {caseStudy.demo && (
+                <a
+                  href={caseStudy.demo}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-link"
+                >
+                  Try the live project
+                  <ArrowUpRight size={18} aria-hidden="true" />
+                </a>
+              )}
+              <a
+                href={caseStudy.source}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-link"
+              >
+                View source
+                <ArrowUpRight size={18} aria-hidden="true" />
+              </a>
+            </>
+          )}
         </div>
-      </CardContent>
-    </Card>
+        {!compact && (
+          <a
+            className="evidence-link"
+            href={caseStudy.evidence.href}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {caseStudy.evidence.label}
+          </a>
+        )}
+      </div>
+    </article>
   );
 }

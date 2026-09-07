@@ -1,13 +1,19 @@
 // app/admin/page.tsx
-import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { ContactSubmissionsManager } from '@/components/admin/ContactSubmissionsManager';
-import { getContactSubmissions } from '@/lib/actions/admin-contact';
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
+import { ContactSubmissionsManager } from "@/components/admin/ContactSubmissionsManager";
+import { getContactSubmissions } from "@/lib/actions/admin-contact";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: 'Admin Dashboard | RuizTechServices',
-  description: 'Administrative controls for RuizTechServices.',
+  robots: { index: false, follow: false },
+  title: "Admin Dashboard | RuizTechServices",
+  description: "Administrative controls for RuizTechServices.",
 };
 
 export default async function AdminPage() {

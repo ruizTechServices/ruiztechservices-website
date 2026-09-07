@@ -1,10 +1,12 @@
-'use server';
+"use server";
 
-import { supabase, type ContactSubmissionInsert } from '@/lib/supabase';
-
-import { headers } from 'next/headers';
-import { redirect } from 'next/navigation';
-import { revalidatePath } from 'next/cache';
+import { supabase, type ContactSubmissionInsert } from "@/lib/supabase";
+import {
+  parseContactForm,
+  formatContactMessage,
+} from "@/lib/forms/contactSchema";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
 export interface ContactFormState {
   success?: boolean;
@@ -13,110 +15,65 @@ export interface ContactFormState {
 }
 
 export async function submitContactForm(
-  prevState: ContactFormState,
-  formData: FormData
+  _previous: ContactFormState,
+  formData: FormData,
 ): Promise<ContactFormState> {
-  try {
-    // Extract form data
-    const name = formData.get('name') as string;
-    const email = formData.get('email') as string;
-    const rawMessage = formData.get('message') as string;
-
-    // Extract pre-qualification fields
-    const helpType = formData.get('helpType') as string || 'not specified';
-    const supportType = formData.get('supportType') as string || 'not specified';
-    const urgency = formData.get('urgency') as string || 'normal';
-    const budget = formData.get('budget') as string || 'not specified';
-
-    // Build structured message with pre-qualification data
-    const message = `--- PRE-QUALIFICATION ---
-Help Type: ${helpType}
-Support Type: ${supportType}
-Urgency: ${urgency}
-Budget: ${budget}
-
---- MESSAGE ---
-${rawMessage}`;
-
-    // Basic validation
-    if (!name || !email || !message) {
-      return {
-        success: false,
-        error: 'All fields are required.',
-      };
-    }
-
-    if (!email.includes('@')) {
-      return {
-        success: false,
-        error: 'Please enter a valid email address.',
-      };
-    }
-
-    // Get client information for tracking
-    const headersList = await headers();
-    const userAgent = headersList.get('user-agent') || '';
-    const forwardedFor = headersList.get('x-forwarded-for');
-    const realIp = headersList.get('x-real-ip');
-    const ipAddress = forwardedFor?.split(',')[0] || realIp || '';
-
-    // Prepare submission data
-    const submissionData: ContactSubmissionInsert = {
-      name: name.trim(),
-      email: email.trim().toLowerCase(),
-      message: message.trim(),
-      status: 'new',
-      ip_address: ipAddress,
-      user_agent: userAgent,
-    };
-
-    // Insert into Supabase
-    const { data, error } = await supabase
-      .from('contact_submissions')
-      .insert([submissionData])
-      .select()
-      .single();
-
-    if (error) {
-      console.error('Supabase error:', error);
-      return {
-        success: false,
-        error: 'Failed to submit your message. Please try again.',
-      };
-    }
-
-    // Log successful submission (for debugging)
-    console.log('Contact form submitted successfully:', {
-      id: data.id,
-      name: data.name,
-      email: data.email,
-      created_at: data.created_at,
-    });
-
-    // Revalidate the contact page to clear any cached data
-    revalidatePath('/contact');
-
-    return {
-      success: true,
-      message: 'Thank you for your message! We\'ll get back to you within 24 hours.',
-    };
-
-  } catch (error) {
-    console.error('Contact form submission error:', error);
+  const parsed = parseContactForm(formData);
+  if (!parsed.success)
     return {
       success: false,
-      error: 'An unexpected error occurred. Please try again.',
+      error: parsed.error.issues[0]?.message || "Please check your request.",
+    };
+  try {
+    const requestHeaders = await headers();
+    const input = parsed.data;
+    const submission: ContactSubmissionInsert = {
+      name: input.name,
+      email: input.email,
+      message: formatContactMessage(input),
+      status: "new",
+      ip_address:
+        requestHeaders
+          .get("x-forwarded-for")
+          ?.split(",")[0]
+          ?.trim()
+          .slice(0, 45) || null,
+      user_agent: requestHeaders.get("user-agent")?.slice(0, 500) || null,
+    };
+    // An anonymous sender must be allowed to insert, never read the private inbox.
+    const { error } = await supabase
+      .from("contact_submissions")
+      .insert(submission)
+      .abortSignal(AbortSignal.timeout(8000));
+    if (error) {
+      console.error("[contact] submission failed", {
+        code: error.code || "upstream_unavailable",
+      });
+      return {
+        success: false,
+        error:
+          "Your request could not be saved. Your message is still here. Use the email option below to send it directly.",
+      };
+    }
+    return {
+      success: true,
+      message: "Your request has been saved for review.",
+    };
+  } catch {
+    console.error("[contact] submission unavailable");
+    return {
+      success: false,
+      error:
+        "The form is temporarily unavailable. Your message is still here. Use the email option below to send it directly.",
     };
   }
 }
 
-// Alternative server action for simple form submission without state
 export async function submitContactFormSimple(formData: FormData) {
   const result = await submitContactForm({}, formData);
-
-  if (result.success) {
-    redirect('/contact?success=true');
-  } else {
-    redirect(`/contact?error=${encodeURIComponent(result.error || 'Unknown error')}`);
-  }
+  redirect(
+    result.success
+      ? "/contact?success=true"
+      : "/contact?error=submission_failed",
+  );
 }

@@ -1,68 +1,63 @@
-// app/about_us/page.tsx
-import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import Link from 'next/link';
-
-export const metadata = {
-  title: 'About RuizTechServices|',
-  description:
-    'Solo-run web & AI solutions—Next.js, ShadCN UI, Supabase, Pinecone, on-site support in NYC.',
-};
-
-export default function AboutUsPage() {
+import Link from "next/link";
+import { ClosingCta } from "@/components/marketing/ClosingCta";
+import { pageMetadata } from "@/lib/content/site";
+export const metadata = pageMetadata(
+  "Meet Gio Ruiz",
+  "Meet Luis Giovanni Ruiz, the Bronx-born founder of ruizTechServices LLC. Direct, practical tech help and web development in New York City.",
+  "/about_us",
+);
+export default function AboutPage() {
   return (
-    <>
-    <main className="max-w-3xl mx-auto px-4 sm:px-6 py-8 sm:py-10 space-y-10">
-      {/* Hero */}
-      <Card>
-        <CardHeader className="text-center">
-          <CardTitle>Your One-Stop Tech Partner</CardTitle>
-          <CardDescription>
-            Web apps, AI pipelines, and hands-on support—direct from the founder.
-          </CardDescription>
-        </CardHeader>
-      </Card>
-
-      {/* What We Do */}
-      <section>
-        <h2 className="text-xl sm:text-2xl font-semibold">What Is ruizTechServices<span className='animate-blink'>|</span>?</h2>
-        <p className="mt-4 text-gray-700">
-          ruizTechServices| is a web and AI development company based in New York City. We specialize in custom web development, AI integrations, and on-site tech support.
+    <main className="marketing-page wrap">
+      <header className="page-intro">
+        <p className="eyebrow">Luis Giovanni Ruiz / Founder & developer</p>
+        <h1>
+          Call me Gio.
+          <br />
+          <em>Let’s make it work.</em>
+        </h1>
+        <p>
+          I’m a Bronx-born developer and the founder of ruizTechServices LLC. I
+          combine hands-on troubleshooting, web development, and
+          customer-service experience to help people get useful work done.
         </p>
-        <ul className="list-disc list-inside mt-4 space-y-2">
-          <li>Custom Next.js & React applications</li>
-          <li>AI & chatbot integrations (OpenAI, Pinecone, Supabase)</li>
-          <li>On-site tech support & IoT setups</li>
-        </ul>
-      </section>
-
-      {/* Why Us */}
-      <section>
-        <h2 className="text-xl sm:text-2xl font-semibold">Why ruizTechServices<span className='animate-blink'>|</span>?</h2>
-        <ul className="mt-4 space-y-2">
-          <li>Solo expert: direct access to the founder—no middleman.</li>
-          <li>Rapid delivery: lean, efficient turn-around.</li>
-          <li>Hands-on: from cloud infra to in-person installs.</li>
-        </ul>
-      </section>
-
-      {/* Our Story */}
-      <section>
-        <h2 className="text-xl sm:text-2xl font-semibold">Our Story</h2>
-        <p className="mt-4 text-gray-700">
-          Founded September 7, 2024 in NYC’s Bronx—built to deliver top-tier web and AI solutions with a personal touch.
-        </p>
-      </section>
-
-      {/* Call to Action */}
-      <section className="text-center">
-        <Link
-          href="/contact"
-          className="inline-block px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-        >
-          Get a Free Consultation
-        </Link>
-      </section>
+      </header>
+      <div className="about-content">
+        <section>
+          <h2>A direct working relationship.</h2>
+          <p>
+            When you contact the business, you work with me. I review the
+            problem, explain the options, agree on the scope, and do the work. I
+            can help in English or Spanish.
+          </p>
+          <p>
+            My recent local work has included an operating-system upgrade,
+            reconnecting a printer, and organizing a customer’s files. My web
+            projects include developer utilities, an interactive soundboard, and
+            an AI chat application.
+          </p>
+          <Link href="/projects" className="text-link">
+            Explore the projects and their code
+          </Link>
+        </section>
+        <section>
+          <h2>Clear about what I can do.</h2>
+          <p>
+            I focus on work that can be defined, tested, and handed off clearly.
+            If a request needs a specialist or goes beyond my scope, I’ll say
+            so. I use AI tools in development and take responsibility for
+            reviewing and testing the work I deliver.
+          </p>
+          <p>
+            ruizTechServices LLC was formed in New York on September 7, 2024.
+            The business serves NYC residents and small businesses, with website
+            work handled remotely where appropriate.
+          </p>
+        </section>
+      </div>
+      <div className="section">
+        <ClosingCta />
+      </div>
     </main>
-    </>
   );
 }

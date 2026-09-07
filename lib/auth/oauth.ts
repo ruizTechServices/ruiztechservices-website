@@ -1,8 +1,24 @@
 "use client";
 
 import { createSupabaseBrowserClient } from "@/lib/supabase/browser";
+import { env } from "@/lib/env";
 
 export async function signInWithGoogleOAuth(next?: string) {
+  // Avoid redirecting a visitor into an unavailable auth provider.
+  try {
+    const response = await fetch(
+      `${env.NEXT_PUBLIC_SUPABASE_URL}/auth/v1/settings`,
+      {
+        headers: { apikey: env.NEXT_PUBLIC_SUPABASE_ANON_KEY },
+        signal: AbortSignal.timeout(5000),
+      },
+    );
+    if (!response.ok) throw new Error("unavailable");
+  } catch {
+    throw new Error(
+      "Sign-in is temporarily unavailable. You can request help without an account.",
+    );
+  }
   const supabase = createSupabaseBrowserClient();
 
   let redirectTo: string | undefined;

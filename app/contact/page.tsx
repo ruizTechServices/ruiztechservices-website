@@ -1,37 +1,57 @@
-// app/contact/page.tsx
-// This is the contact page server component
-import { ContactForm } from '@/components/forms/ContactForm';
-import { ContactInfo } from '@/components/sections/ContactInfo';
-
-export const metadata = {
-  title: 'Contact RuizTechServices|',
-  description:
-    'Get in touch with RuizTechServices| for web development, AI integrations, and tech support in NYC.',
-};
-
-export default function ContactPage() {
+import { isContactBackendAvailable } from "@/lib/forms/contactAvailability";
+import { ContactForm } from "@/components/forms/ContactForm";
+import { ContactInfo } from "@/components/sections/ContactInfo";
+import { pageMetadata, serviceOptions } from "@/lib/content/site";
+export const metadata = pageMetadata(
+  "Request tech help",
+  "Tell Gio about a website blocker, computer or printer problem, or web project. No account or payment needed to send an inquiry.",
+  "/contact",
+);
+export default async function ContactPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const [params, backendAvailable] = await Promise.all([
+    searchParams,
+    isContactBackendAvailable(),
+  ]);
+  const requested =
+    typeof params.service === "string"
+      ? params.service
+      : params.job === "tech-rescue-sprint"
+        ? "tech-rescue"
+        : params.audience
+          ? "local-tech-help"
+          : "general";
+  const initialService = serviceOptions.some(
+    (option) => option.value === requested,
+  )
+    ? requested
+    : "general";
+  const source =
+    typeof params.project === "string" ? params.project.slice(0, 150) : "";
   return (
-    <main className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800">
-      <div className="container mx-auto px-4 py-12 md:py-16">
-        <div className="text-center mb-12">
-          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-            Contact Us
-          </h1>
-          <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto px-4">
-            Ready to bring your ideas to life? Let&apos;s discuss your project and how 
-            RuizTechServices| can help you achieve your goals.
-          </p>
-        </div>
-        
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
-          <div className="order-2 lg:order-1">
-            <ContactInfo />
-          </div>
-          
-          <div className="order-1 lg:order-2">
-            <ContactForm />
-          </div>
-        </div>
+    <main className="marketing-page wrap">
+      <header className="page-intro">
+        <p className="eyebrow">Start a conversation</p>
+        <h1>
+          Let’s solve
+          <br />
+          <em>the right problem.</em>
+        </h1>
+        <p>
+          Describe what’s getting in your way. I’ll review whether I can help
+          and confirm scope, pricing, and availability with you.
+        </p>
+      </header>
+      <div className="contact-grid">
+        <ContactInfo />
+        <ContactForm
+          initialService={initialService}
+          source={source}
+          backendAvailable={backendAvailable}
+        />
       </div>
     </main>
   );

@@ -1,10 +1,11 @@
-import { Suspense } from "react";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/main/navbar";
 import { Footer } from "@/components/main/footer";
 import { Providers } from "@/components/providers/Providers";
-import { Analytics } from "@vercel/analytics/next"
+import { SiteAnalytics } from "@/components/marketing/SiteAnalytics";
+import { site } from "@/lib/content/site";
+import type { Metadata } from "next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,12 +17,12 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata = {
-  title: 'ruizTechServices|',
+export const metadata: Metadata = {
+  metadataBase: new URL(site.origin),
+  title: { default: site.name, template: "%s | ruizTechServices|" },
   description:
-    'RuizTechServices| – Solo-led web development, AI integrations & on-site tech support in NYC.',
+    "Website fixes, practical NYC tech help, and web development with Gio Ruiz.",
 };
-
 
 export default function RootLayout({
   children,
@@ -36,15 +37,16 @@ export default function RootLayout({
     >
       <body className="antialiased">
         <Providers>
-          <div className="w-full flex justify-center">
-            <Suspense fallback={null}>
-              <Navbar />
-            </Suspense>
+          <a className="skip-link" href="#main-content">
+            Skip to content
+          </a>
+          <Navbar />
+          <div id="main-content" tabIndex={-1}>
+            {children}
           </div>
-          {children}
           <Footer />
         </Providers>
-        <Analytics />
+        <SiteAnalytics />
       </body>
     </html>
   );

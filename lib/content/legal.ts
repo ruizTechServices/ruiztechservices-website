@@ -4,7 +4,7 @@
 export const privacyPolicy = {
   title: "Privacy Policy",
   description: "How ruizTechServices handles your data.",
-  lastUpdated: "December 2024",
+  lastUpdated: "September 7, 2026",
   contactEmail: "service_team@ruiztechservices.com",
   sections: [
     {
@@ -12,10 +12,16 @@ export const privacyPolicy = {
       content: `When you use our contact form, we collect:
 - Your name
 - Your email address
-- Your message content
+- Your message and any service, website, location, platform, or timing details you choose to provide
 - Basic request metadata (IP address, browser info) for security purposes
 
-That's it. We keep it simple.`,
+If you choose Google sign-in, Supabase processes your account identity and session information. Sign-in is optional for sending a service inquiry. Authentication uses session cookies. If you use an existing billing feature, Stripe processes payment information; do not enter card details in the contact form.`,
+    },
+    {
+      heading: "Website Analytics & Providers",
+      content: `The website includes Vercel Web Analytics to understand aggregate page use. This can include visited pages, referrers, device and browser information, and approximate location. Vercel describes this analytics service as using aggregate statistics without third-party tracking cookies. We exclude private account routes and strip query strings from analytics page URLs.
+
+Vercel hosts the website. Supabase provides database and authentication services. Email requests use the email providers involved in sending and receiving your message. Opening an email link only prepares a message; you must send it from your email app.`,
     },
     {
       heading: "How We Use Your Information",
@@ -56,7 +62,7 @@ Just email us and we'll handle it within 30 days.`,
 export const termsOfService = {
   title: "Terms of Service",
   description: "Terms and conditions for working with ruizTechServices.",
-  lastUpdated: "December 2024",
+  lastUpdated: "September 7, 2026",
   contactEmail: "service_team@ruiztechservices.com",
   sections: [
     {
@@ -65,10 +71,11 @@ export const termsOfService = {
     },
     {
       heading: "Payment Terms",
-      content: `- Retainer and advisory services are billed monthly, in advance.
-- Project work requires a deposit before work begins (typically 50%).
-- Final payment is due upon project completion, before handoff.
-- We use auto-billing for recurring services. You'll be notified before each charge.`,
+      content: `- Website Tech Rescue covers one accepted website blocker for $300.
+- Before payment, we reproduce the issue, verify safe access and rollback, and agree on written scope, a success criterion, and a delivery window.
+- Full payment is due after acceptance and approval of the scope, before work begins.
+- Local support and other development work are quoted separately. The written agreement sets their payment and cancellation terms.
+- Sending an inquiry does not confirm a booking, commit you to a payment, or start a subscription.`,
     },
     {
       heading: "Scheduling & Rescheduling",

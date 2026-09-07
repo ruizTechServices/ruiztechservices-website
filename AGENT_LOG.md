@@ -83,3 +83,13 @@ Fix ESLint errors preventing production build:
 **Action:** Removed the explicit `customer_email` field from the session creation call. It is now handled exclusively via `customerParams` (mutually exclusive logic).
 **Result:** Fixed. Stripe request will now contain only one of the two parameters.
 **Directive Updated:** no
+
+## 2026-09-07 — Acquisition and truthful project proof
+
+- Verified the live Vercel project `prj_m75tD2GbR8Y6L9QZs6QGdrcwBG2O` serves repository `ruizTechServices/ruiztechservices-website`, baseline `ca7251534b749ba23ab3fdbba116a0eb91c4e4c1`.
+- Reworked public pages around one pre-qualified $300 website blocker; kept local tech help and separately scoped development visible.
+- Replaced unsupported anonymous client results with Just Tools, Gio’s Soundboard, and a Nucleus source walkthrough. Evidence links are pinned; screenshots are real public UI captures.
+- Added service-specific inquiry context, server validation, honeypot, bounded input, no-readback inserts, protected inbox actions, accessible feedback, and retained form values after errors.
+- Existing Supabase project `kzirwwuywztjpxrotpwz` is INACTIVE. Restore was attempted through the connector and returned `Project not found`. No alternate database, schema, keys, or auth provider was substituted. The contact page checks availability and offers a prepared email flow while the same backend is unavailable.
+- Added public canonical metadata, sitemap, robots, Organization data, private-page noindex, navigation rendered independently of auth, and a permanent motion-aware brand caret.
+- See `docs/production-refresh.md` for validation and remaining operational work.

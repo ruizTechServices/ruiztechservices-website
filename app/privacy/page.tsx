@@ -1,10 +1,13 @@
 // app/privacy/page.tsx
 import { privacyPolicy } from "@/lib/content/legal";
 
-export const metadata = {
-  title: `${privacyPolicy.title} | ruizTechServices`,
-  description: privacyPolicy.description,
-};
+import { pageMetadata } from "@/lib/content/site";
+
+export const metadata = pageMetadata(
+  privacyPolicy.title,
+  privacyPolicy.description,
+  "/privacy",
+);
 
 export default function PrivacyPage() {
   return (

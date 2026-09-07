@@ -1,86 +1,86 @@
-// lib/content/caseStudies.ts
-// Case study data for the Projects page
-
+// Owned projects, with public source evidence. Do not add outcome metrics without receipts.
 export interface CaseStudy {
   id: string;
-  clientType: string;
-  industry: string;
+  title: string;
+  category: string;
+  summary: string;
   problem: string;
-  solution: string;
-  outcome: string;
-  services: string[];
+  implementation: string;
+  demonstration: string;
+  technologies: string[];
+  image?: { src: string; alt: string; width: number; height: number };
+  demo?: string;
+  source: string;
+  evidence: { label: string; href: string };
 }
 
 export const caseStudies: CaseStudy[] = [
   {
-    id: "retail-pos-migration",
-    clientType: "Retail Store Owner",
-    industry: "Retail",
+    id: "just-tools",
+    title: "Just Tools",
+    category: "Developer utilities",
+    summary: "Small tools. Useful answers. Right in your browser.",
     problem:
-      "Legacy POS system crashing daily, losing sales data, and staff wasting 2+ hours on manual workarounds.",
-    solution:
-      "Migrated to cloud-based POS, set up automated backups, trained staff on-site, and configured inventory sync with their e-commerce platform.",
-    outcome:
-      "Zero downtime in 6 months. Staff time savings of 10+ hours/week. Sales data now syncs automatically.",
-    services: ["On-Site Support", "System Migration", "Training"],
+      "Everyday development needs quick ways to format data, inspect text, and prepare prompts.",
+    implementation:
+      "I develop a collection of browser utilities with processing logic separated from the interface. The JSON formatter validates and formats input locally, with dedicated regression tests.",
+    demonstration:
+      "Open the JSON formatter, paste an example, and format or minify it. Inspect the source to see how the tool logic is kept independent of the UI.",
+    technologies: ["Next.js", "TypeScript", "Browser APIs", "Vitest"],
+    image: {
+      src: "/projects/justtools.jpg",
+      alt: "Just Tools homepage showing its searchable collection of browser developer utilities.",
+      width: 1348,
+      height: 926,
+    },
+    demo: "https://www.justtools.net/",
+    source: "https://github.com/ruizTechServices/justtools-1",
+    evidence: {
+      label: "Inspect the JSON processing logic",
+      href: "https://github.com/ruizTechServices/justtools-1/blob/ff1fcf1c629b7121fecb5a33573d3a046acf744d/src/features/tools/json-formatter/logic.ts",
+    },
   },
   {
-    id: "law-firm-ai-docs",
-    clientType: "Small Law Firm",
-    industry: "Legal",
+    id: "soundboard",
+    title: "Gio’s Soundboard",
+    category: "Interactive web experience",
+    summary: "A playful interface with deliberate playback behavior.",
     problem:
-      "Paralegals spending 15+ hours weekly on document formatting and initial contract reviews.",
-    solution:
-      "Built custom AI workflow using GPT-4 for contract clause extraction and automated document templating with their existing tools.",
-    outcome:
-      "Document prep time reduced by 60%. Firm took on 3 additional clients without hiring.",
-    services: ["AI Integration", "Workflow Automation", "Tech Advisory"],
+      "A sound collection needs fast discovery and predictable controls as people browse, play, and return.",
+    implementation:
+      "Part of my personal portfolio, the soundboard combines search, category filters, and favorites with one audio player. Playback explicitly handles loading, pause, completion, and failure.",
+    demonstration:
+      "Find a clip, play it, and try the controls. Favorites and settings stay in that browser; shared links select a clip without starting audio automatically.",
+    technologies: ["React", "TypeScript", "Audio APIs", "Supabase portfolio"],
+    image: {
+      src: "/projects/soundboard.webp",
+      alt: "Gio’s soundboard with searchable sound pads, category filters, favorites, and an audio player.",
+      width: 1153,
+      height: 795,
+    },
+    demo: "https://www.luis-ruiz.com/soundboard",
+    source: "https://github.com/ruizTechServices/luis_ruiz_3",
+    evidence: {
+      label: "Inspect the audio player",
+      href: "https://github.com/ruizTechServices/luis_ruiz_3/blob/d74b310eb2ca8b4202b173b39198fe48ba057d84/components/soundboard/use-audio-player.ts",
+    },
   },
   {
-    id: "agency-client-portal",
-    clientType: "Creative Agency",
-    industry: "Marketing",
+    id: "nucleus",
+    title: "Nucleus",
+    category: "AI application · source walkthrough",
+    summary: "The backend work behind an AI conversation.",
     problem:
-      "Client communication scattered across email, Slack, and Dropbox. Projects slipping through cracks.",
-    solution:
-      "Designed and built a custom Next.js client portal with project tracking, file sharing, and automated status updates.",
-    outcome:
-      "Client satisfaction scores up 40%. Project delivery time improved by 25%. One source of truth for all projects.",
-    services: ["Web Application", "Build & Deploy", "Tech Advisory"],
-  },
-  {
-    id: "restaurant-network",
-    clientType: "Restaurant Group",
-    industry: "Hospitality",
-    problem:
-      "WiFi dead zones, kitchen display systems dropping, and no visibility into network issues across 3 locations.",
-    solution:
-      "On-site network audit and redesign. Installed mesh WiFi, configured VLANs for POS isolation, set up remote monitoring.",
-    outcome:
-      "Network uptime 99.9%. Can now diagnose issues remotely before staff even notices. Scaled same setup to 2 new locations.",
-    services: ["On-Site Support", "Network Setup", "Tech Advisory"],
-  },
-  {
-    id: "startup-mvp",
-    clientType: "Early-Stage Startup",
-    industry: "SaaS",
-    problem:
-      "Founder had an idea and some wireframes but no technical co-founder. Needed MVP to validate with investors.",
-    solution:
-      "3-month engagement: architected the product, built MVP with Next.js + Supabase, deployed to production, set up analytics.",
-    outcome:
-      "MVP launched in 10 weeks. Secured $150K pre-seed. Founder now has codebase they own and can hand off to future team.",
-    services: ["Build & Deploy", "Tech Advisory", "CTO-for-Hire"],
+      "An AI chat application must connect model selection and streaming with the user’s access and usage allowance.",
+    implementation:
+      "I develop Nucleus as an owned AI chat project. The chat route verifies the user, checks allowed models, reserves usage before generation, and settles usage around the response. Billing is handled separately through signed Stripe webhooks.",
+    demonstration:
+      "Read the chat route to follow authentication, model access, and usage accounting. This walkthrough describes the implementation; it is not a claim that every model or paid tier is currently available.",
+    technologies: ["Next.js", "Supabase", "Streaming", "Stripe"],
+    source: "https://github.com/ruizTechServices/nucleus-bot",
+    evidence: {
+      label: "Walk through the chat route",
+      href: "https://github.com/ruizTechServices/nucleus-bot/blob/7bde3082885fadac4cc96304f214b77903f41747/app/api/chat/route.ts",
+    },
   },
 ];
-
-export const projectsPageContent = {
-  title: "Projects & Case Studies",
-  subtitle:
-    "Real problems solved for real businesses. Names anonymized, results verified.",
-  cta: {
-    text: "Have a similar challenge?",
-    buttonText: "Let's Talk",
-    href: "/contact",
-  },
-};
