@@ -93,3 +93,10 @@ Fix ESLint errors preventing production build:
 - Existing Supabase project `kzirwwuywztjpxrotpwz` is INACTIVE. Restore was attempted through the connector and returned `Project not found`. No alternate database, schema, keys, or auth provider was substituted. The contact page checks availability and offers a prepared email flow while the same backend is unavailable.
 - Added public canonical metadata, sitemap, robots, Organization data, private-page noindex, navigation rendered independently of auth, and a permanent motion-aware brand caret.
 - See `docs/production-refresh.md` for validation and remaining operational work.
+
+## 2026-09-07 — Brand favicon
+
+- Replaced the starter Vercel triangle with a cobalt `r|` mark tied to the ruizTechServices wordmark.
+- Added a versioned modern PNG icon and an opaque Apple touch icon using Next.js file conventions; retained the standard multi-size ICO route.
+- Saved the selected design master and reproducible export commands in `docs/favicon.md`.
+- Inspected the 16 pixel export and checked asset dimensions and opacity. No application logic, database, or auth changes.
