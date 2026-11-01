@@ -116,3 +116,4 @@ Fix ESLint errors preventing production build:
 - Added regressions: 44 checks pass. Lint has no errors, typecheck and production build pass. Browser checks confirmed validation without delivery or false success; no console errors were observed.
 - The original Supabase project remains inaccessible through the connected account; Chrome requires sign-in to inspect it. Both separate PC bridge endpoints were unavailable. No replacement database or provider configuration was introduced.
 - Saved the implementation inventory, broader CMS gap, and next user inputs in `docs/resume-here.md`.
+- The first Vercel preview failed before compilation because the project selected discontinued Node.js 20.x. Pinned the application to supported Node.js 24.x, matching the successful local runtime, without changing project-wide settings.

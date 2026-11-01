@@ -7,6 +7,7 @@
 - Production branch: `main`; verified deployed revision: `5a6c2d2cb63a1f09fe1cff60a45172b3952e1374`.
 - Vercel project: `ruiz-tech-services-nextjs`, ID `prj_m75tD2GbR8Y6L9QZs6QGdrcwBG2O`.
 - Current stack: Next.js 15.5.9, React 19, Tailwind, Supabase. Keep this framework.
+- This branch pins Node.js 24.x in `package.json`, matching local verification. The first preview was blocked before compilation because the Vercel project still selects discontinued Node.js 20.x. The package setting overrides it for this branch's deployments without editing project-wide settings.
 
 ## Existing inquiry implementation
 
