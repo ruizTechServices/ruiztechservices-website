@@ -107,3 +107,12 @@ Fix ESLint errors preventing production build:
 - Identified the owning organization as `ruizTechServices's Org`; the current connection lists only `Gio'sPrivateOrg`.
 - Fixed middleware session-cookie propagation to Server Components and preservation on redirects, with five targeted regressions using real Next request/response handling.
 - Kept the current database, auth provider, callback, and role decisions. See `docs/auth-investigation.md` for evidence and the required project-restoration step.
+
+## 2026-10-31 — Resume inquiry implementation as Jarvis
+
+- Reconfirmed the canonical GitHub repository and production revision `5a6c2d2` through Vercel. Created a local checkout on the Mac and the `jarvis/inquiry-reliability` branch.
+- Reused existing contact validation for the primary email fallback and preserved source context in prepared messages. Invalid requests stay editable with an error.
+- Changed the inbox status menu to reflect saved server data; added recovery messages for interrupted status/deletion actions and accessible action names.
+- Added regressions: 44 checks pass. Lint has no errors, typecheck and production build pass. Browser checks confirmed validation without delivery or false success; no console errors were observed.
+- The original Supabase project remains inaccessible through the connected account; Chrome requires sign-in to inspect it. Both separate PC bridge endpoints were unavailable. No replacement database or provider configuration was introduced.
+- Saved the implementation inventory, broader CMS gap, and next user inputs in `docs/resume-here.md`.

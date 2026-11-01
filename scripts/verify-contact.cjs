@@ -22,6 +22,10 @@ function load(file, stubs = {}) {
   return output.exports;
 }
 const schema = load("lib/forms/contactSchema.ts");
+const email = load("lib/forms/contactEmail.ts", {
+  "./contactSchema": schema,
+  "@/lib/content/site": load("lib/content/site.ts"),
+});
 const valid = {
   name: "Test Visitor",
   email: "visitor@example.com",
@@ -53,9 +57,39 @@ for (const [name, changes] of [
     "uploaded file instead of text",
     { message: new Blob(["not a plain message"]) },
   ],
-])
+]) {
   test(`rejects ${name}`, () =>
     assert.equal(schema.parseContactForm(form(changes)).success, false));
+  test(`email submission rejects ${name} before preparing a link`, () => {
+    const result = email.prepareContactEmail(form(changes));
+    assert.equal(result.success, false);
+    assert.equal(result.href, undefined);
+    assert.ok(result.error);
+  });
+}
+
+test("validated email keeps normalized details, request context, and special characters", () => {
+  const result = email.prepareContactEmail(form({
+    name: "  Test Visitor  ",
+    email: "Visitor@Example.COM",
+    source: "just-tools",
+    message: "The form fails with an ampersand & a question mark? Please check.",
+  }));
+  assert.equal(result.success, true);
+  const url = new URL(result.href);
+  assert.equal(url.protocol, "mailto:");
+  assert.equal(url.pathname, "service_team@ruiztechservices.com");
+  assert.equal(url.searchParams.get("subject"), "Website inquiry: tech-rescue");
+  assert.equal(url.searchParams.get("body"), result.body);
+  assert.match(result.body, /^Name: Test Visitor\nReply to: visitor@example.com\n/);
+  assert.match(result.body, /Inquiry context: just-tools\n\nThe form fails with an ampersand & a question mark\?/);
+});
+
+test("email submission for local support does not require a website", () => {
+  assert.equal(email.prepareContactEmail(
+    form({ service: "local-tech-help", websiteUrl: "" }),
+  ).success, true);
+});
 
 test("normalizes names/email and keeps inquiry context", () => {
   const result = schema.parseContactForm(

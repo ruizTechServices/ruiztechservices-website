@@ -8,7 +8,7 @@
     "start": "next start",
     "gen-types": "npx -y supabase gen types typescript --project-id kzirwwuywztjpxrotpwz > lib/database.types.ts",
     "typecheck": "tsc --noEmit",
-    "test": "node --test scripts/verify-contact.cjs scripts/verify-auth.cjs",
+    "test": "node --test scripts/verify-contact.cjs scripts/verify-auth.cjs scripts/verify-admin-inbox.cjs",
     "lint": "eslint app components lib hooks middleware.ts next.config.ts"
   },
   "dependencies": {
