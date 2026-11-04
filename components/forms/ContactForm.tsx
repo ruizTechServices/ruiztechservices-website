@@ -17,6 +17,10 @@ import {
 } from "@/components/ui/select";
 import { submitContactForm } from "@/lib/actions/contact";
 import { serviceOptions, site } from "@/lib/content/site";
+import {
+  contactEmailDraft,
+  prepareContactEmail,
+} from "@/lib/forms/contactEmail";
 
 function SubmitButton({ byEmail }: { byEmail: boolean }) {
   const { pending } = useFormStatus();
@@ -54,24 +58,17 @@ export function ContactForm({
   });
   const [consent, setConsent] = useState(false);
   const [copyStatus, setCopyStatus] = useState("");
+  const [emailError, setEmailError] = useState("");
   const update = (key: keyof typeof values, value: string) =>
     setValues((current) => ({ ...current, [key]: value }));
   const websiteService =
     service === "tech-rescue" || service === "web-development";
-  const emailBody = [
-    `Name: ${values.name}`,
-    `Reply to: ${values.email}`,
-    `Service: ${service}`,
-    values.websiteUrl && `Website: ${values.websiteUrl}`,
-    values.location && `Location: ${values.location}`,
-    values.platform && `Platform: ${values.platform}`,
-    values.timing && `Timing: ${values.timing}`,
-    "",
-    values.message,
-  ]
-    .filter(Boolean)
-    .join("\n");
-  const emailHref = `mailto:${site.email}?subject=${encodeURIComponent("Website inquiry: " + service)}&body=${encodeURIComponent(emailBody)}`;
+  const { body: emailBody, href: emailHref } = contactEmailDraft({
+    ...values,
+    service,
+    source,
+  });
+  const error = emailError || state.error;
 
   if (state.success)
     return (
@@ -106,7 +103,13 @@ export function ContactForm({
         onSubmit={(event) => {
           if (!backendAvailable) {
             event.preventDefault();
-            window.location.href = emailHref;
+            const result = prepareContactEmail(new FormData(event.currentTarget));
+            if (!result.success) {
+              setEmailError(result.error);
+              return;
+            }
+            setEmailError("");
+            window.location.href = result.href;
           }
         }}
         className="space-y-5"
@@ -266,16 +269,16 @@ export function ContactForm({
             and understand my details will be used to respond to this request.
           </span>
         </label>
-        {state.error && (
+        {error && (
           <div className="form-error" role="alert">
             <AlertCircle size={20} aria-hidden="true" />
-            <p>{state.error}</p>
+            <p>{error}</p>
           </div>
         )}
         <SubmitButton byEmail={!backendAvailable} />
       </form>
       <div className="email-fallback">
-        <p>Prefer email{state.error ? " or need another way to send" : ""}?</p>
+        <p>Prefer email{error ? " or need another way to send" : ""}?</p>
         <a href={emailHref} className="text-link">
           <Mail size={18} aria-hidden="true" />
           Email your request
@@ -283,7 +286,7 @@ export function ContactForm({
         <p className="field-hint">
           Opens your email app with your message. Review it, then press Send.
         </p>
-        {(state.error || !backendAvailable) && (
+        {(error || !backendAvailable) && (
           <>
             <Button
               type="button"

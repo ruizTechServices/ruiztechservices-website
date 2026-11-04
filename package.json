@@ -2,13 +2,16 @@
   "name": "ruiztechservices-website",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "24.x"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "gen-types": "npx -y supabase gen types typescript --project-id kzirwwuywztjpxrotpwz > lib/database.types.ts",
+    "gen-types": "npx -y supabase@3.0.0 gen types typescript --project-id wvkfwtuobrzwpomvfsbk --schema public > lib/inquiry-database.types.ts",
     "typecheck": "tsc --noEmit",
-    "test": "node --test scripts/verify-contact.cjs scripts/verify-auth.cjs",
+    "test": "node --test scripts/verify-contact.cjs scripts/verify-auth.cjs scripts/verify-admin-inbox.cjs scripts/verify-oauth.cjs",
     "lint": "eslint app components lib hooks middleware.ts next.config.ts"
   },
   "dependencies": {
