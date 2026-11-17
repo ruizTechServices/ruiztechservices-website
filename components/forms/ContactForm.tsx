@@ -258,7 +258,8 @@ export function ContactForm({
             name="privacy"
             value="accepted"
             required
-            checked={consent}
+            // Keep the visitor's selection when React resets the form after an error.
+            defaultChecked={consent}
             onChange={(e) => setConsent(e.target.checked)}
           />
           <span>
