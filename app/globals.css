@@ -892,7 +892,7 @@ summary:focus-visible {
   color: #778599;
 }
 .field-hint {
-  color: #687990;
+  color: #5c6f88;
   font-size: 0.78rem;
   line-height: 1.6;
 }
@@ -1030,8 +1030,7 @@ summary:focus-visible {
   .project-grid,
   .local-grid,
   .scope-grid,
-  .about-content,
-  .contact-grid {
+  .about-content {
     grid-template-columns: 1fr;
   }
   .service-icon {
@@ -1079,7 +1078,20 @@ summary:focus-visible {
     padding-top: 0;
   }
   .contact-grid {
+    grid-template-columns: minmax(0, 1fr);
     gap: 38px;
+  }
+  .contact-grid .field {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .contact-grid .field button[role="combobox"] {
+    height: auto;
+    text-align: left;
+    white-space: normal;
+  }
+  .contact-grid .field [data-slot="select-value"] {
+    display: block;
+    -webkit-line-clamp: unset;
   }
   .form-panel {
     padding: 24px;
