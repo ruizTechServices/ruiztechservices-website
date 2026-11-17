@@ -1,13 +1,14 @@
 // components/main/LoginModal.tsx
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, type RefObject } from "react";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogDescription,
+  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 
@@ -16,11 +17,21 @@ interface LoginModalProps {
   onOpenChange: (open: boolean) => void;
   onGoogleSignIn: () => Promise<void>;
   initialError?: string | null;
+  showTrigger: boolean;
+  fallbackFocusRef?: RefObject<HTMLElement | null>;
 }
 
-export function LoginModal({ open, onOpenChange, onGoogleSignIn, initialError }: LoginModalProps) {
+export function LoginModal({
+  open,
+  onOpenChange,
+  onGoogleSignIn,
+  initialError,
+  showTrigger,
+  fallbackFocusRef,
+}: LoginModalProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (initialError) {
@@ -50,7 +61,26 @@ export function LoginModal({ open, onOpenChange, onGoogleSignIn, initialError }:
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
+      {showTrigger && (
+        <div>
+          <DialogTrigger asChild>
+            <Button ref={triggerRef} variant="outline">
+              Login
+            </Button>
+          </DialogTrigger>
+        </div>
+      )}
+      <DialogContent
+        onCloseAutoFocus={(event) => {
+          if (triggerRef.current?.getClientRects().length) return;
+
+          const fallback = fallbackFocusRef?.current;
+          if (fallback?.getClientRects().length) {
+            event.preventDefault();
+            fallback.focus();
+          }
+        }}
+      >
         <DialogHeader>
           <DialogTitle>Login</DialogTitle>
           <DialogDescription>
