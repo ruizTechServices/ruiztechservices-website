@@ -1,13 +1,11 @@
 // components/navbar.tsx
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, type RefObject } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { LoginButton } from "@/components/main/LoginButton";
 import { LoginModal } from "@/components/main/LoginModal";
-import { handleLoginClick } from "@/lib/auth/handlers";
 import { signInWithGoogleOAuth, signOut } from "@/lib/auth/oauth";
 import { useAuth } from "@/hooks/use-auth";
 import { createSupabaseBrowserClient } from "@/lib/supabase/browser";
@@ -15,9 +13,11 @@ import { createSupabaseBrowserClient } from "@/lib/supabase/browser";
 export function AccountMenu({
   onNavigate,
   mobile = false,
+  fallbackFocusRef,
 }: {
   onNavigate?: () => void;
   mobile?: boolean;
+  fallbackFocusRef?: RefObject<HTMLElement | null>;
 }) {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
@@ -135,13 +135,7 @@ export function AccountMenu({
       );
     }
 
-    return (
-      <div className={mobile ? "w-full" : ""}>
-        <LoginButton
-          onClick={() => handleLoginClick(() => setIsLoginModalOpen(true))}
-        />
-      </div>
-    );
+    return null;
   };
 
   return (
@@ -156,6 +150,8 @@ export function AccountMenu({
             return signInWithGoogleOAuth(nextFromParams || pathname);
           }}
           initialError={authError}
+          showTrigger={!loading}
+          fallbackFocusRef={fallbackFocusRef}
         />
       )}
     </>

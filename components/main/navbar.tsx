@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu } from "lucide-react";
@@ -23,11 +23,12 @@ const links = [
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
+  const homeLinkRef = useRef<HTMLAnchorElement>(null);
   const pathname = usePathname();
   return (
     <header className="site-header">
       <div className="site-nav wrap">
-        <Link href="/" aria-label="ruizTechServices home">
+        <Link href="/" aria-label="ruizTechServices home" ref={homeLinkRef}>
           <Brand />
         </Link>
         <nav className="desktop-nav" aria-label="Main navigation">
@@ -48,7 +49,7 @@ export function Navbar() {
               <span className="account-placeholder" aria-hidden="true" />
             }
           >
-            <AccountMenu />
+            <AccountMenu fallbackFocusRef={homeLinkRef} />
           </Suspense>
         </nav>
         <Sheet open={open} onOpenChange={setOpen}>
