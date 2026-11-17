@@ -107,3 +107,31 @@ Fix ESLint errors preventing production build:
 - Identified the owning organization as `ruizTechServices's Org`; the current connection lists only `Gio'sPrivateOrg`.
 - Fixed middleware session-cookie propagation to Server Components and preservation on redirects, with five targeted regressions using real Next request/response handling.
 - Kept the current database, auth provider, callback, and role decisions. See `docs/auth-investigation.md` for evidence and the required project-restoration step.
+
+## 2026-10-31 — Resume inquiry implementation as Jarvis
+
+- Reconfirmed the canonical GitHub repository and production revision `5a6c2d2` through Vercel. Created a local checkout on the Mac and the `jarvis/inquiry-reliability` branch.
+- Reused existing contact validation for the primary email fallback and preserved source context in prepared messages. Invalid requests stay editable with an error.
+- Changed the inbox status menu to reflect saved server data; added recovery messages for interrupted status/deletion actions and accessible action names.
+- Added regressions: 44 checks pass. Lint has no errors, typecheck and production build pass. Browser checks confirmed validation without delivery or false success; no console errors were observed.
+- The original Supabase project remains inaccessible through the connected account; Chrome requires sign-in to inspect it. Both separate PC bridge endpoints were unavailable. No replacement database or provider configuration was introduced.
+- Saved the implementation inventory, broader CMS gap, and next user inputs in `docs/resume-here.md`.
+- The first Vercel preview failed before compilation because the project selected discontinued Node.js 20.x. Pinned the application to supported Node.js 24.x, matching the successful local runtime, without changing project-wide settings.
+
+## 2026-11-02 — Fresh inquiry database and website-source recovery
+
+- Reloaded Supabase and confirmed the new `ruiztechservices-db` project `wvkfwtuobrzwpomvfsbk` is healthy on Micro compute. Its public schema was empty; the public website still referenced the original project. Gio explicitly authorized initialization as a fresh database.
+- Applied provider migration `20261102183026` for the existing inquiry form and owner inbox only: `admins`, `contact_submissions`, column privileges, RLS, and an inbox ordering index. Old inquiries, users, and deferred AI/chat/billing tables were not restored.
+- The initial 16 database role/privilege assertions passed inside a rolled-back transaction; security advisors returned no issues. Hardened the SQL fixture for replay after real records exist: per-run synthetic identities and every contact mutation scoped to its fixture ID/email/name.
+- Verified a browser request through preview deployment `dpl_8mAzeUL2NuiMCoCD7fUdAhf8Pg7c` persisted as labeled synthetic row `2`, status `new`, and rendered **Request received**. The fixture remains in the inbox; it is not a customer lead. No real customer inquiry, email, or payment operation occurred.
+- Google Auth was disabled with no configured client values. Owner sign-in, exact verified-user admin provisioning, authenticated inbox verification, and the production cutover remain pending.
+- Split fresh schema types into `lib/inquiry-database.types.ts` for active intake and submission insert/update types; kept the shared server/admin clients on the historical generated snapshot for deferred legacy compatibility. The contact display type accommodates historical nullable status. No claim that the legacy AI/chat/billing schema exists in the fresh project.
+- Local regression checks increased to 54, including OAuth availability checks; typecheck and lint passed with no errors and four pre-existing warnings.
+- Gio clarified that Bae's Berries is a newly created site in Codex on the other laptop. Its actual source/repository ZIP transfer is pending; the historical Hostinger site and unpublished GoDaddy placeholder are not the requested source. The other host is not currently connected and both older PC bridge endpoints are unavailable.
+
+## 2026-11-04 — Complete inquiry preview checkpoint
+
+- Gio chose to finish the inquiry preview first and defer owner login. Production remains outside this preview checkpoint.
+- The replay-safe SQL fixture passed all 16 assertions with the persistent labeled preview inquiry already present, then rolled back its synthetic identities and mutations.
+- All 54 application regressions, typecheck, lint, and production build passed with local test-only AI configuration. Lint retains four unrelated pre-existing warnings.
+- Corrected contributor instructions for the fresh generated inquiry types and the existing verification commands.

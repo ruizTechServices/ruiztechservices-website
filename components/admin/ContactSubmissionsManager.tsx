@@ -48,9 +48,13 @@ export function ContactSubmissionsManager({
   const handleStatusChange = (id: number, status: 'new' | 'read' | 'replied') => {
     setError(null);
     startTransition(async () => {
-      const result = await updateContactSubmissionStatus(id, status);
-      if (!result.success) {
-        setError(result.error || 'Failed to update status');
+      try {
+        const result = await updateContactSubmissionStatus(id, status);
+        if (!result.success) {
+          setError(result.error || 'Unable to update the status. Refresh the inbox and try again.');
+        }
+      } catch {
+        setError('Could not confirm the status change. Refresh the inbox before trying again.');
       }
     });
   };
@@ -58,9 +62,13 @@ export function ContactSubmissionsManager({
   const handleDelete = (id: number) => {
     setError(null);
     startTransition(async () => {
-      const result = await deleteContactSubmission(id);
-      if (!result.success) {
-        setError(result.error || 'Failed to delete submission');
+      try {
+        const result = await deleteContactSubmission(id);
+        if (!result.success) {
+          setError(result.error || 'Unable to delete the submission. Refresh the inbox and try again.');
+        }
+      } catch {
+        setError('Could not confirm the deletion. Refresh the inbox before trying again.');
       }
     });
   };
@@ -78,7 +86,7 @@ export function ContactSubmissionsManager({
   return (
     <div className="space-y-4">
       {error && (
-        <div className="p-4 bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-400 rounded-lg">
+        <div role="alert" className="p-4 bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-400 rounded-lg">
           {error}
         </div>
       )}
@@ -118,7 +126,7 @@ export function ContactSubmissionsManager({
                 </Badge>
 
                 <Select
-                  defaultValue={submission.status || 'new'}
+                  value={submission.status || 'new'}
                   onValueChange={(value) =>
                     handleStatusChange(
                       submission.id!,
@@ -127,7 +135,10 @@ export function ContactSubmissionsManager({
                   }
                   disabled={isPending}
                 >
-                  <SelectTrigger className="w-24 sm:w-28">
+                  <SelectTrigger
+                    className="w-24 sm:w-28"
+                    aria-label={`Status for ${submission.name}`}
+                  >
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -143,6 +154,7 @@ export function ContactSubmissionsManager({
                       variant="destructive"
                       size="icon"
                       disabled={isPending}
+                      aria-label={`Delete submission from ${submission.name}`}
                     >
                       <Trash2 className="h-4 w-4" />
                     </Button>

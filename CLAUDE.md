@@ -9,10 +9,13 @@ npm install            # installs with legacy-peer-deps (set in .npmrc)
 npm run dev            # next dev (http://localhost:3000)
 npm run build          # next build (must pass for production)
 npm start              # next start
-npm run gen-types      # regenerate lib/database.types.ts from the Supabase project (kzirwwuywztjpxrotpwz)
+npm run gen-types      # regenerate lib/inquiry-database.types.ts from fresh project wvkfwtuobrzwpomvfsbk
+npm test               # contact, auth, inbox, and OAuth regression checks
+npm run typecheck      # TypeScript check without emitting
+npm run lint           # ESLint gate
 ```
 
-There is no `lint` or `test` script. ESLint is wired through `eslint-config-next` and runs as part of `next build` — treat `npm run build` as the lint gate. Ad-hoc API smoke tests live in `scripts/test-api.js` and `scripts/test-stripe-init.js`; run with `node scripts/test-api.js` against a live `npm run dev` server.
+Run the regression checks, typecheck, lint, and build for relevant application changes. Ad-hoc API smoke tests live in `scripts/test-api.js` and `scripts/test-stripe-init.js`; run with `node scripts/test-api.js` against a live `npm run dev` server.
 
 ## Environment
 
@@ -33,7 +36,7 @@ Next.js 15 App Router. `app/layout.tsx` wraps everything in `Providers` (auth + 
 - `lib/supabase/middleware.ts`: only used by `middleware.ts` to refresh sessions.
 - `lib/supabase/admin.ts` → `createSupabaseAdmin()`: service-role client that **bypasses RLS**. Use only in trusted server contexts (webhooks, admin tasks). Throws if `SUPABASE_SERVICE_ROLE_KEY` is missing.
 
-`lib/database.types.ts` is generated — don't hand-edit. Rerun `npm run gen-types` after schema changes.
+Generated schema files must not be hand-edited. `npm run gen-types` refreshes `lib/inquiry-database.types.ts` from the fresh inquiry database. `lib/database.types.ts` is the historical snapshot retained for shared server/admin clients and deferred legacy features; it is not the fresh project's schema. See `docs/resume-here.md` before changing that compatibility boundary.
 
 ### AI provider abstraction
 `lib/ai/` exposes a provider-agnostic `AIService` interface and an `AIProviderFactory` that returns a `MistralProvider` or `OpenAIProvider`. The underlying SDK clients live in `lib/openai/client.ts` and `lib/mistral/inference.ts` and are instantiated once from `env`. New providers should implement `AIService` and be registered in `AIProviderFactory.getProvider`.

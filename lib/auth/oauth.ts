@@ -14,6 +14,8 @@ export async function signInWithGoogleOAuth(next?: string) {
       },
     );
     if (!response.ok) throw new Error("unavailable");
+    const settings = await response.json();
+    if (settings?.external?.google !== true) throw new Error("unavailable");
   } catch {
     throw new Error(
       "Sign-in is temporarily unavailable. You can request help without an account.",

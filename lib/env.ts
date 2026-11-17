@@ -8,6 +8,7 @@ const envSchema = z.object({
   MISTRAL_API_KEY: z.string().optional(),
   STRIPE_SECRET_KEY: z.string().optional(),
   STRIPE_WEBHOOK_SECRET: z.string().optional(),
+  SUPABASE_SERVICE_ROLE_URL: z.string().url().optional(),
   SUPABASE_SERVICE_ROLE_KEY: z.string().optional(),
 });
 
@@ -22,6 +23,7 @@ const parsedEnv = envSchema.safeParse({
   MISTRAL_API_KEY: process.env.MISTRAL_API_KEY,
   STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
   STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
+  SUPABASE_SERVICE_ROLE_URL: process.env.SUPABASE_SERVICE_ROLE_URL,
   SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
 });
 
